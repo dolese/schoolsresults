@@ -128,7 +128,7 @@ function PublicSchoolPage() {
             <Megaphone className="h-5 w-5 text-brand" /> Announcements
           </h2>
           <div className="grid gap-3 md:grid-cols-2">
-            {announcements.map((a) => (
+            {announcements.map((a: { id: string; title: string; body: string; published_at: string }) => (
               <article key={a.id} className="rounded-2xl border border-border/60 bg-card p-5">
                 <div className="text-xs text-muted-foreground">{new Date(a.published_at).toLocaleDateString()}</div>
                 <h3 className="mt-1 font-semibold">{a.title}</h3>
