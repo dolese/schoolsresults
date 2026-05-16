@@ -19,10 +19,8 @@ const examTypes = [
   "pre_mock",
 ] as const;
 
-async function resolveSchoolId(
-  supabase: Awaited<ReturnType<typeof getCtx>>["supabase"],
-  slug: string,
-) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function resolveSchoolId(supabase: any, slug: string) {
   const { data, error } = await supabase
     .from("schools")
     .select("id, name, slug, motto, logo_url, region, status")
@@ -30,13 +28,14 @@ async function resolveSchoolId(
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) throw new Error("School not found or you don't have access");
-  return data;
-}
-
-// Helper type for context (not used at runtime)
-function getCtx() {
-  return null as unknown as {
-    supabase: ReturnType<typeof import("@supabase/supabase-js").createClient>;
+  return data as {
+    id: string;
+    name: string;
+    slug: string;
+    motto: string | null;
+    logo_url: string | null;
+    region: string | null;
+    status: string;
   };
 }
 
