@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useServerFn, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Search, GraduationCap, Megaphone } from "lucide-react";
