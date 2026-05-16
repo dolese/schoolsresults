@@ -87,7 +87,7 @@ function PublicSchoolPage() {
                 <p className="text-sm text-muted-foreground">No matching students found.</p>
               ) : (
                 <ul className="divide-y divide-border/60">
-                  {search.data.matches.map((m) => (
+                  {search.data.matches.map((m: { id: string; full_name: string; admission_no: string; form: string | null; year: number }) => (
                     <li key={m.id} className="flex items-center justify-between py-3 text-sm">
                       <div>
                         <div className="font-medium">{m.full_name}</div>
