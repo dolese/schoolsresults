@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate, useServerFn } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { GraduationCap, Plus, LogOut, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,8 +53,8 @@ function AppDashboard() {
               </Button>
             </div>
           )}
-          {(data ?? []).map(({ school, role }) => (
-            <Link key={school.id} to="/$schoolSlug" params={{ schoolSlug: school.slug }} className="rounded-2xl border border-border/60 bg-card p-6 transition hover:border-brand">
+          {(data ?? []).map(({ school, role }: { school: { id: string; slug: string; name: string; status: string }; role: string }) => (
+            <Link key={school.id} to="/manage/$schoolSlug" params={{ schoolSlug: school.slug }} className="rounded-2xl border border-border/60 bg-card p-6 transition hover:border-brand">
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-display text-lg font-semibold">{school.name}</h3>

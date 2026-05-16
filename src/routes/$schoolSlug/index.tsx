@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useServerFn, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Search, GraduationCap, Megaphone } from "lucide-react";
@@ -86,7 +87,7 @@ function PublicSchoolPage() {
                 <p className="text-sm text-muted-foreground">No matching students found.</p>
               ) : (
                 <ul className="divide-y divide-border/60">
-                  {search.data.matches.map((m) => (
+                  {search.data.matches.map((m: { id: string; full_name: string; admission_no: string; form: string | null; year: number }) => (
                     <li key={m.id} className="flex items-center justify-between py-3 text-sm">
                       <div>
                         <div className="font-medium">{m.full_name}</div>
@@ -127,7 +128,7 @@ function PublicSchoolPage() {
             <Megaphone className="h-5 w-5 text-brand" /> Announcements
           </h2>
           <div className="grid gap-3 md:grid-cols-2">
-            {announcements.map((a) => (
+            {announcements.map((a: { id: string; title: string; body: string; published_at: string }) => (
               <article key={a.id} className="rounded-2xl border border-border/60 bg-card p-5">
                 <div className="text-xs text-muted-foreground">{new Date(a.published_at).toLocaleDateString()}</div>
                 <h3 className="mt-1 font-semibold">{a.title}</h3>

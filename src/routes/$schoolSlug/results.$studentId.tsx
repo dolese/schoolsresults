@@ -28,9 +28,9 @@ export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
 
 function ResultPage() {
   const { school, student, exam, marks } = Route.useLoaderData();
-  const scores = marks.map((m) => m.score);
+  const scores = (marks as Array<{ subject: string; code: string | null; score: number }>).map((m) => m.score);
   const div = scores.length >= 4 ? computeDivision(scores) : null;
-  const total = scores.reduce((a, b) => a + b, 0);
+  const total = scores.reduce((a: number, b: number) => a + b, 0);
   const avg = scores.length ? total / scores.length : 0;
 
   return (
@@ -71,7 +71,7 @@ function ResultPage() {
                   <tr><th className="py-2">Subject</th><th className="py-2 text-right">Score</th><th className="py-2 text-right">Grade</th></tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
-                  {marks.map((m, i) => {
+                  {(marks as Array<{ subject: string; code: string | null; score: number }>).map((m, i) => {
                     const g = gradeFor(m.score);
                     return (
                       <tr key={i}>

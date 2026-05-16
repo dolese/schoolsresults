@@ -26,8 +26,8 @@ export const createSchool = createServerFn({ method: "POST" })
     const { data: id, error } = await supabase.rpc("create_school", {
       _slug: data.slug,
       _name: data.name,
-      _region: data.region ?? null,
-      _motto: data.motto ?? null,
+      _region: data.region ?? undefined,
+      _motto: data.motto ?? undefined,
     });
     if (error) {
       if (error.message?.includes("schools_slug_key") || error.code === "23505") {
