@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ImportStudentsDialog } from "@/components/manage/ImportStudentsDialog";
 
 export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/students")({
   head: () => ({ meta: [{ title: "Students — Dashboard" }] }),
@@ -139,6 +140,11 @@ function StudentsPage() {
           <h1 className="font-display text-3xl font-semibold">Students</h1>
           <p className="mt-1 text-sm text-muted-foreground">Manage your school's student roster.</p>
         </div>
+        <div className="flex items-center gap-2">
+        <ImportStudentsDialog
+          schoolSlug={schoolSlug}
+          forms={meta.data?.forms ?? []}
+        />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openNew} className="bg-brand text-brand-foreground hover:bg-brand/90">
@@ -216,6 +222,7 @@ function StudentsPage() {
             )}
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
