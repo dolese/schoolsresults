@@ -441,7 +441,7 @@ export const bulkImportStudents = createServerFn({ method: "POST" })
     }));
     const { error, data: inserted } = await supabase
       .from("students")
-      .upsert(rows, { onConflict: "school_id,admission_no" })
+      .upsert(rows, { onConflict: "school_id,admission_no,year" })
       .select("id");
     if (error) throw new Error(error.message);
     return { count: inserted?.length ?? rows.length };
