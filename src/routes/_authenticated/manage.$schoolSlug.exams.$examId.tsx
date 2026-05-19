@@ -8,6 +8,7 @@ import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { ImportMarksDialog } from "@/components/manage/ImportMarksDialog";
 
 export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/exams/$examId")({
   head: () => ({ meta: [{ title: "Marks entry — Dashboard" }] }),
@@ -111,6 +112,12 @@ function MarksEntry() {
             {(exam.forms as { name: string } | null)?.name ?? "—"} · {exam.type.replace("_", "-")} · {exam.year} · {students.length} students · {subjects.length} subjects
           </p>
         </div>
+        <div className="flex items-center gap-2">
+        <ImportMarksDialog
+          schoolSlug={schoolSlug}
+          examId={examId}
+          subjects={grid.data.subjects.map((s) => ({ name: s.name, code: s.code }))}
+        />
         <Button
           onClick={() => save.mutate()}
           disabled={!dirty || save.isPending}
@@ -118,6 +125,7 @@ function MarksEntry() {
         >
           <Save className="mr-2 h-4 w-4" /> {save.isPending ? "Saving…" : dirty ? "Save changes" : "Saved"}
         </Button>
+        </div>
       </div>
 
       {students.length === 0 ? (
