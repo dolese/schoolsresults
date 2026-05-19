@@ -357,43 +357,188 @@ export const saveMarksBulk = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!exam) throw new Error("Exam not found");
 
-    // Delete cleared entries (score null) then upsert valid ones
     const toClear = data.entries.filter((e) => e.score === null);
     const toUpsert = data.entries.filter((e) => e.score !== null);
 
-    for (const c of toClear) {
-      await supabase
-        .from("marks")
-        .delete()
-        .eq("exam_id", data.examId)
-        .eq("student_id", c.student_id)
-        .eq("subject_id", c.subject_id);
+    if (toClear.length) {
+      const byStudent = new Map<string, string[]>();
+      for (const c of toClear) {
+        const arr = byStudent.get(c.student_id) ?? [];
+        arr.push(c.subject_id);
+        byStudent.set(c.student_id, arr);
+      }
+      for (const [student_id, subject_ids] of byStudent) {
+        const { error } = await supabase
+          .from("marks")
+          .delete()
+          .eq("exam_id", data.examId)
+          .eq("student_id", student_id)
+          .in("subject_id", subject_ids);
+        if (error) throw new Error(error.message);
+      }
     }
 
     if (toUpsert.length) {
-      // Manual upsert: try update, then insert if no row
-      for (const e of toUpsert) {
-        const { data: existing } = await supabase
-          .from("marks")
-          .select("id")
-          .eq("exam_id", data.examId)
-          .eq("student_id", e.student_id)
-          .eq("subject_id", e.subject_id)
-          .maybeSingle();
-        if (existing) {
-          await supabase
-            .from("marks")
-            .update({ score: e.score, updated_at: new Date().toISOString() })
-            .eq("id", existing.id);
-        } else {
-          await supabase.from("marks").insert({
-            exam_id: data.examId,
-            student_id: e.student_id,
-            subject_id: e.subject_id,
-            score: e.score,
-          });
-        }
-      }
+      const rows = toUpsert.map((e) => ({
+        exam_id: data.examId,
+        student_id: e.student_id,
+        subject_id: e.subject_id,
+        score: e.score,
+        updated_at: new Date().toISOString(),
+      }));
+      const { error } = await supabase
+        .from("marks")
+        .upsert(rows, { onConflict: "exam_id,student_id,subject_id" });
+      if (error) throw new Error(error.message);
     }
     return { saved: toUpsert.length, cleared: toClear.length };
+  });
+
+/* ---------------- Bulk import ---------------- */
+
+export const bulkImportStudents = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z
+      .object({
+        slug: slugSchema,
+        form_id: z.string().uuid().optional().nullable(),
+        year: z.coerce.number().int().min(2000).max(2100),
+        rows: z
+          .array(
+            z.object({
+              admission_no: z.string().min(1).max(40),
+              full_name: z.string().min(2).max(120),
+              gender: z.enum(["M", "F"]).optional().nullable(),
+              form_name: z.string().max(40).optional().nullable(),
+            }),
+          )
+          .min(1)
+          .max(2000),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const school = await resolveSchoolId(supabase, data.slug);
+    const { data: forms } = await supabase
+      .from("forms")
+      .select("id, name")
+      .eq("school_id", school.id);
+    const formByName = new Map(
+      (forms ?? []).map((f) => [f.name.toLowerCase().trim(), f.id as string]),
+    );
+    const rows = data.rows.map((r) => ({
+      school_id: school.id,
+      admission_no: r.admission_no.trim(),
+      full_name: r.full_name.trim(),
+      gender: r.gender ?? null,
+      year: data.year,
+      form_id:
+        (r.form_name && formByName.get(r.form_name.toLowerCase().trim())) ||
+        data.form_id ||
+        null,
+    }));
+    const { error, data: inserted } = await supabase
+      .from("students")
+      .upsert(rows, { onConflict: "school_id,admission_no" })
+      .select("id");
+    if (error) throw new Error(error.message);
+    return { count: inserted?.length ?? rows.length };
+  });
+
+export const bulkImportMarks = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z
+      .object({
+        slug: slugSchema,
+        examId: z.string().uuid(),
+        rows: z
+          .array(
+            z.object({
+              admission_no: z.string().min(1).max(40),
+              scores: z.record(
+                z.string().min(1).max(40),
+                z.number().min(0).max(100).nullable(),
+              ),
+            }),
+          )
+          .min(1)
+          .max(2000),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const school = await resolveSchoolId(supabase, data.slug);
+
+    const { data: exam } = await supabase
+      .from("exams")
+      .select("id, form_id")
+      .eq("id", data.examId)
+      .eq("school_id", school.id)
+      .maybeSingle();
+    if (!exam) throw new Error("Exam not found");
+
+    const [{ data: examSubjects }, { data: students }] = await Promise.all([
+      supabase
+        .from("exam_subjects")
+        .select("subject_id, subjects(id, name, code)")
+        .eq("exam_id", exam.id),
+      supabase
+        .from("students")
+        .select("id, admission_no")
+        .eq("school_id", school.id),
+    ]);
+
+    const subjectByKey = new Map<string, string>();
+    for (const es of examSubjects ?? []) {
+      const sub = es.subjects as { id: string; name: string; code: string | null } | null;
+      if (!sub) continue;
+      subjectByKey.set(sub.name.toLowerCase().trim(), sub.id);
+      if (sub.code) subjectByKey.set(sub.code.toLowerCase().trim(), sub.id);
+    }
+    const studentByAdm = new Map(
+      (students ?? []).map((s) => [s.admission_no.toLowerCase().trim(), s.id as string]),
+    );
+
+    const upserts: { exam_id: string; student_id: string; subject_id: string; score: number }[] = [];
+    const unmatchedStudents: string[] = [];
+    const unmatchedSubjects = new Set<string>();
+
+    for (const r of data.rows) {
+      const sid = studentByAdm.get(r.admission_no.toLowerCase().trim());
+      if (!sid) {
+        unmatchedStudents.push(r.admission_no);
+        continue;
+      }
+      for (const [key, score] of Object.entries(r.scores)) {
+        if (score === null || score === undefined) continue;
+        const subjectId = subjectByKey.get(key.toLowerCase().trim());
+        if (!subjectId) {
+          unmatchedSubjects.add(key);
+          continue;
+        }
+        upserts.push({
+          exam_id: data.examId,
+          student_id: sid,
+          subject_id: subjectId,
+          score,
+        });
+      }
+    }
+
+    if (upserts.length) {
+      const { error } = await supabase
+        .from("marks")
+        .upsert(upserts, { onConflict: "exam_id,student_id,subject_id" });
+      if (error) throw new Error(error.message);
+    }
+
+    return {
+      saved: upserts.length,
+      unmatchedStudents,
+      unmatchedSubjects: Array.from(unmatchedSubjects),
+    };
   });
