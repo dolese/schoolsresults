@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Printer } from "lucide-react";
 import { getPublicStudentResult } from "@/lib/schools.functions";
 import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,12 @@ function ResultPage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back
           </Link>
         </Button>
-        <div className="rounded-3xl border border-border/60 bg-card p-8 shadow-xl">
+        <div className="mb-3 flex justify-end no-print">
+          <Button size="sm" variant="outline" onClick={() => window.print()}>
+            <Printer className="mr-2 h-4 w-4" /> Print / Save as PDF
+          </Button>
+        </div>
+        <div className="print-area rounded-3xl border border-border/60 bg-card p-8 shadow-xl">
           <div className="flex items-start justify-between border-b border-border/60 pb-6">
             <div>
               <div className="text-xs uppercase tracking-wider text-muted-foreground">Result Slip</div>

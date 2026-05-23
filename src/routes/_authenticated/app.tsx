@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { GraduationCap, Plus, LogOut, ExternalLink } from "lucide-react";
+import { GraduationCap, Plus, LogOut, ExternalLink, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getMySchools } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ function AppDashboard() {
   const navigate = useNavigate();
   const fetchMySchools = useServerFn(getMySchools);
   const { data, isLoading } = useQuery({ queryKey: ["my-schools"], queryFn: () => fetchMySchools() });
+  const isSuper = (data ?? []).some((r: { role: string }) => r.role === "super_admin");
 
   async function logout() {
     await supabase.auth.signOut();
@@ -33,6 +34,20 @@ function AppDashboard() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-10">
+        {isSuper && (
+          <div className="mb-6 flex items-center justify-between rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <Shield className="h-5 w-5 text-brand" />
+              <div>
+                <div className="font-medium">Super admin access</div>
+                <div className="text-xs text-muted-foreground">Manage all schools on the platform.</div>
+              </div>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/super">Open console</Link>
+            </Button>
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-3xl font-semibold">Your schools</h1>
