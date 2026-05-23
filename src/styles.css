@@ -123,3 +123,10 @@
   }
   h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; }
 }
+
+@media print {
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .print-area { box-shadow: none !important; border: none !important; }
+  @page { margin: 14mm; }
+}
