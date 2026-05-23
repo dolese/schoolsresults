@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SchoolSlugIndexRouteImport } from './routes/$schoolSlug/index'
+import { Route as AuthenticatedSuperRouteImport } from './routes/_authenticated/super'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
@@ -52,6 +53,11 @@ const SchoolSlugIndexRoute = SchoolSlugIndexRouteImport.update({
   id: '/$schoolSlug/',
   path: '/$schoolSlug/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSuperRoute = AuthenticatedSuperRouteImport.update({
+  id: '/super',
+  path: '/super',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/app': typeof AuthenticatedAppRoute
+  '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/app': typeof AuthenticatedAppRoute
+  '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
+  '/_authenticated/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/_authenticated/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/app'
+    | '/super'
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/manage/$schoolSlug'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/app'
+    | '/super'
     | '/$schoolSlug'
     | '/$schoolSlug/results/$studentId'
     | '/manage/$schoolSlug/announcements'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/_authenticated/app'
+    | '/_authenticated/super'
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/_authenticated/manage/$schoolSlug'
@@ -248,6 +260,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$schoolSlug/'
       preLoaderRoute: typeof SchoolSlugIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/super': {
+      id: '/_authenticated/super'
+      path: '/super'
+      fullPath: '/super'
+      preLoaderRoute: typeof AuthenticatedSuperRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/app': {
       id: '/_authenticated/app'
@@ -349,11 +368,13 @@ const AuthenticatedManageSchoolSlugRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
+  AuthenticatedSuperRoute: typeof AuthenticatedSuperRoute
   AuthenticatedManageSchoolSlugRoute: typeof AuthenticatedManageSchoolSlugRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppRoute: AuthenticatedAppRoute,
+  AuthenticatedSuperRoute: AuthenticatedSuperRoute,
   AuthenticatedManageSchoolSlugRoute:
     AuthenticatedManageSchoolSlugRouteWithChildren,
 }
@@ -374,3 +395,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
