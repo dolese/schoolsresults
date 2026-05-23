@@ -21,6 +21,7 @@ import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$school
 import { Route as AuthenticatedManageSchoolSlugIndexRouteImport } from './routes/_authenticated/manage.$schoolSlug.index'
 import { Route as AuthenticatedManageSchoolSlugStudentsRouteImport } from './routes/_authenticated/manage.$schoolSlug.students'
 import { Route as AuthenticatedManageSchoolSlugExamsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams'
+import { Route as AuthenticatedManageSchoolSlugAnnouncementsRouteImport } from './routes/_authenticated/manage.$schoolSlug.announcements'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -87,6 +88,12 @@ const AuthenticatedManageSchoolSlugExamsRoute =
     path: '/exams',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
+const AuthenticatedManageSchoolSlugAnnouncementsRoute =
+  AuthenticatedManageSchoolSlugAnnouncementsRouteImport.update({
+    id: '/announcements',
+    path: '/announcements',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugExamsExamIdRoute =
   AuthenticatedManageSchoolSlugExamsExamIdRouteImport.update({
     id: '/$examId',
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/app': typeof AuthenticatedAppRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
+  '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugIndexRoute
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/_authenticated/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/_authenticated/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/_authenticated/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/_authenticated/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/_authenticated/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/manage/$schoolSlug'
+    | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/exams'
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug/'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/$schoolSlug'
     | '/$schoolSlug/results/$studentId'
+    | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/exams'
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/_authenticated/manage/$schoolSlug'
+    | '/_authenticated/manage/$schoolSlug/announcements'
     | '/_authenticated/manage/$schoolSlug/exams'
     | '/_authenticated/manage/$schoolSlug/students'
     | '/_authenticated/manage/$schoolSlug/'
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugExamsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
+    '/_authenticated/manage/$schoolSlug/announcements': {
+      id: '/_authenticated/manage/$schoolSlug/announcements'
+      path: '/announcements'
+      fullPath: '/manage/$schoolSlug/announcements'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
     '/_authenticated/manage/$schoolSlug/exams/$examId': {
       id: '/_authenticated/manage/$schoolSlug/exams/$examId'
       path: '/$examId'
@@ -304,6 +324,7 @@ const AuthenticatedManageSchoolSlugExamsRouteWithChildren =
   )
 
 interface AuthenticatedManageSchoolSlugRouteChildren {
+  AuthenticatedManageSchoolSlugAnnouncementsRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   AuthenticatedManageSchoolSlugExamsRoute: typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   AuthenticatedManageSchoolSlugStudentsRoute: typeof AuthenticatedManageSchoolSlugStudentsRoute
   AuthenticatedManageSchoolSlugIndexRoute: typeof AuthenticatedManageSchoolSlugIndexRoute
@@ -311,6 +332,8 @@ interface AuthenticatedManageSchoolSlugRouteChildren {
 
 const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugRouteChildren =
   {
+    AuthenticatedManageSchoolSlugAnnouncementsRoute:
+      AuthenticatedManageSchoolSlugAnnouncementsRoute,
     AuthenticatedManageSchoolSlugExamsRoute:
       AuthenticatedManageSchoolSlugExamsRouteWithChildren,
     AuthenticatedManageSchoolSlugStudentsRoute:
@@ -351,3 +374,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
