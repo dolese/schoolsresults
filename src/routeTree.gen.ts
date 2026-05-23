@@ -20,9 +20,11 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
 import { Route as AuthenticatedManageSchoolSlugIndexRouteImport } from './routes/_authenticated/manage.$schoolSlug.index'
+import { Route as AuthenticatedManageSchoolSlugAcademicsRouteImport } from './routes/_authenticated/manage.$schoolSlug.academics'
 import { Route as AuthenticatedManageSchoolSlugStudentsRouteImport } from './routes/_authenticated/manage.$schoolSlug.students'
 import { Route as AuthenticatedManageSchoolSlugExamsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams'
 import { Route as AuthenticatedManageSchoolSlugAnnouncementsRouteImport } from './routes/_authenticated/manage.$schoolSlug.announcements'
+import { Route as AuthenticatedManageSchoolSlugSettingsRouteImport } from './routes/_authenticated/manage.$schoolSlug.settings'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -82,6 +84,12 @@ const AuthenticatedManageSchoolSlugIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
+const AuthenticatedManageSchoolSlugAcademicsRoute =
+  AuthenticatedManageSchoolSlugAcademicsRouteImport.update({
+    id: '/academics',
+    path: '/academics',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugStudentsRoute =
   AuthenticatedManageSchoolSlugStudentsRouteImport.update({
     id: '/students',
@@ -98,6 +106,12 @@ const AuthenticatedManageSchoolSlugAnnouncementsRoute =
   AuthenticatedManageSchoolSlugAnnouncementsRouteImport.update({
     id: '/announcements',
     path: '/announcements',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugSettingsRoute =
+  AuthenticatedManageSchoolSlugSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugExamsExamIdRoute =
@@ -117,8 +131,10 @@ export interface FileRoutesByFullPath {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
+  '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
@@ -132,8 +148,10 @@ export interface FileRoutesByTo {
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
+  '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
+  '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
@@ -150,8 +168,10 @@ export interface FileRoutesById {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/_authenticated/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/_authenticated/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/_authenticated/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/_authenticated/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
+  '/_authenticated/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/_authenticated/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/_authenticated/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/_authenticated/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
@@ -168,8 +188,10 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/manage/$schoolSlug'
+    | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/exams'
+    | '/manage/$schoolSlug/settings'
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug/'
     | '/manage/$schoolSlug/exams/$examId'
@@ -183,8 +205,10 @@ export interface FileRouteTypes {
     | '/super'
     | '/$schoolSlug'
     | '/$schoolSlug/results/$studentId'
+    | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/exams'
+    | '/manage/$schoolSlug/settings'
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug'
     | '/manage/$schoolSlug/exams/$examId'
@@ -200,8 +224,10 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/_authenticated/manage/$schoolSlug'
+    | '/_authenticated/manage/$schoolSlug/academics'
     | '/_authenticated/manage/$schoolSlug/announcements'
     | '/_authenticated/manage/$schoolSlug/exams'
+    | '/_authenticated/manage/$schoolSlug/settings'
     | '/_authenticated/manage/$schoolSlug/students'
     | '/_authenticated/manage/$schoolSlug/'
     | '/_authenticated/manage/$schoolSlug/exams/$examId'
@@ -296,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugIndexRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
+    '/_authenticated/manage/$schoolSlug/academics': {
+      id: '/_authenticated/manage/$schoolSlug/academics'
+      path: '/academics'
+      fullPath: '/manage/$schoolSlug/academics'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAcademicsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
     '/_authenticated/manage/$schoolSlug/students': {
       id: '/_authenticated/manage/$schoolSlug/students'
       path: '/students'
@@ -315,6 +348,13 @@ declare module '@tanstack/react-router' {
       path: '/announcements'
       fullPath: '/manage/$schoolSlug/announcements'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/settings': {
+      id: '/_authenticated/manage/$schoolSlug/settings'
+      path: '/settings'
+      fullPath: '/manage/$schoolSlug/settings'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugSettingsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/exams/$examId': {
@@ -343,18 +383,24 @@ const AuthenticatedManageSchoolSlugExamsRouteWithChildren =
   )
 
 interface AuthenticatedManageSchoolSlugRouteChildren {
+  AuthenticatedManageSchoolSlugAcademicsRoute: typeof AuthenticatedManageSchoolSlugAcademicsRoute
   AuthenticatedManageSchoolSlugAnnouncementsRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   AuthenticatedManageSchoolSlugExamsRoute: typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
+  AuthenticatedManageSchoolSlugSettingsRoute: typeof AuthenticatedManageSchoolSlugSettingsRoute
   AuthenticatedManageSchoolSlugStudentsRoute: typeof AuthenticatedManageSchoolSlugStudentsRoute
   AuthenticatedManageSchoolSlugIndexRoute: typeof AuthenticatedManageSchoolSlugIndexRoute
 }
 
 const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugRouteChildren =
   {
+    AuthenticatedManageSchoolSlugAcademicsRoute:
+      AuthenticatedManageSchoolSlugAcademicsRoute,
     AuthenticatedManageSchoolSlugAnnouncementsRoute:
       AuthenticatedManageSchoolSlugAnnouncementsRoute,
     AuthenticatedManageSchoolSlugExamsRoute:
       AuthenticatedManageSchoolSlugExamsRouteWithChildren,
+    AuthenticatedManageSchoolSlugSettingsRoute:
+      AuthenticatedManageSchoolSlugSettingsRoute,
     AuthenticatedManageSchoolSlugStudentsRoute:
       AuthenticatedManageSchoolSlugStudentsRoute,
     AuthenticatedManageSchoolSlugIndexRoute:

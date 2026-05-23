@@ -47,19 +47,24 @@ export const getMySchools = createServerFn({ method: "GET" })
       .select("role, school_id, schools(id, slug, name, logo_url, status, region)")
       .eq("user_id", userId);
     if (error) throw new Error(error.message);
-    return (data ?? [])
-      .filter((r) => r.schools)
-      .map((r) => ({
-        role: r.role,
-        school: r.schools as {
-          id: string;
-          slug: string;
-          name: string;
-          logo_url: string | null;
-          status: string;
-          region: string | null;
-        },
-      }));
+    const rows = data ?? [];
+
+    return {
+      isSuperAdmin: rows.some((r) => r.role === "super_admin"),
+      schools: rows
+        .filter((r) => r.schools)
+        .map((r) => ({
+          role: r.role,
+          school: r.schools as {
+            id: string;
+            slug: string;
+            name: string;
+            logo_url: string | null;
+            status: string;
+            region: string | null;
+          },
+        })),
+    };
   });
 
 export const getSchoolBySlug = createServerFn({ method: "GET" })
@@ -74,7 +79,13 @@ export const getSchoolBySlug = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     if (!school) return null;
 
-    const [{ count: studentCount }, { count: classCount }, { data: latestExam }, { data: announcements }] =
+    const [
+      { count: studentCount },
+      { count: classCount },
+      { data: publishedExams },
+      { data: forms },
+      { data: announcements },
+    ] =
       await Promise.all([
         supabaseAdmin
           .from("students")
@@ -86,12 +97,16 @@ export const getSchoolBySlug = createServerFn({ method: "GET" })
           .eq("school_id", school.id),
         supabaseAdmin
           .from("exams")
-          .select("id, name, year, type, published")
+          .select("id, name, year, type, published, form_id, forms(name, level)")
           .eq("school_id", school.id)
           .eq("published", true)
           .order("created_at", { ascending: false })
-          .limit(1)
-          .maybeSingle(),
+          .limit(20),
+        supabaseAdmin
+          .from("forms")
+          .select("id, name, level")
+          .eq("school_id", school.id)
+          .order("level"),
         supabaseAdmin
           .from("announcements")
           .select("id, title, body, published_at")
@@ -100,13 +115,28 @@ export const getSchoolBySlug = createServerFn({ method: "GET" })
           .limit(5),
       ]);
 
+    const latestExam = publishedExams?.[0] ?? null;
+    const years = Array.from(new Set((publishedExams ?? []).map((exam) => exam.year))).sort(
+      (a, b) => b - a,
+    );
+
     return {
       school,
       stats: {
         students: studentCount ?? 0,
         classes: classCount ?? 0,
       },
-      latestExam: latestExam ?? null,
+      latestExam,
+      forms: forms ?? [],
+      publishedExams: (publishedExams ?? []).map((exam) => ({
+        id: exam.id,
+        name: exam.name,
+        year: exam.year,
+        type: exam.type,
+        form_id: exam.form_id,
+        form: (exam.forms as { name: string; level: number } | null) ?? null,
+      })),
+      years,
       announcements: announcements ?? [],
     };
   });
@@ -131,6 +161,57 @@ export const searchPublicResults = createServerFn({ method: "POST" })
       .eq("status", "active")
       .maybeSingle();
     if (!school) return { matches: [] };
+
+    if (data.examId) {
+      const { data: exam, error: examErr } = await supabaseAdmin
+        .from("exams")
+        .select("id, form_id")
+        .eq("id", data.examId)
+        .eq("school_id", school.id)
+        .eq("published", true)
+        .maybeSingle();
+      if (examErr) throw new Error(examErr.message);
+      if (!exam) return { matches: [] };
+
+      const { data: marks, error: marksErr } = await supabaseAdmin
+        .from("marks")
+        .select("student_id")
+        .eq("exam_id", exam.id);
+      if (marksErr) throw new Error(marksErr.message);
+
+      const studentIds = Array.from(new Set((marks ?? []).map((mark) => mark.student_id)));
+      if (studentIds.length === 0) return { matches: [] };
+
+      let examSearch = supabaseAdmin
+        .from("students")
+        .select("id, admission_no, full_name, year, forms(name, level), streams(name)")
+        .eq("school_id", school.id)
+        .in("id", studentIds)
+        .limit(20);
+
+      const term = data.query.trim();
+      examSearch = examSearch.or(`admission_no.eq.${term},full_name.ilike.%${term}%`);
+      if (data.year) examSearch = examSearch.eq("year", data.year);
+      if (exam.form_id) examSearch = examSearch.eq("form_id", exam.form_id);
+
+      const { data: examStudents, error: examSearchErr } = await examSearch;
+      if (examSearchErr) throw new Error(examSearchErr.message);
+
+      const filteredByExam = (examStudents ?? []).filter((student) =>
+        data.formLevel ? (student.forms as { level: number } | null)?.level === data.formLevel : true,
+      );
+
+      return {
+        matches: filteredByExam.map((student) => ({
+          id: student.id,
+          admission_no: student.admission_no,
+          full_name: student.full_name,
+          year: student.year,
+          form: (student.forms as { name: string } | null)?.name ?? null,
+          stream: (student.streams as { name: string } | null)?.name ?? null,
+        })),
+      };
+    }
 
     let q = supabaseAdmin
       .from("students")
@@ -183,7 +264,7 @@ export const getPublicStudentResult = createServerFn({ method: "POST" })
 
     const { data: student } = await supabaseAdmin
       .from("students")
-      .select("id, admission_no, full_name, year, forms(name, level), streams(name), school_id")
+      .select("id, admission_no, full_name, year, form_id, forms(name, level), streams(name), school_id")
       .eq("id", data.studentId)
       .maybeSingle();
     if (!student || student.school_id !== school.id) throw new Error("Student not found");
@@ -195,6 +276,7 @@ export const getPublicStudentResult = createServerFn({ method: "POST" })
       .eq("published", true)
       .order("created_at", { ascending: false });
     if (data.examId) examQuery = examQuery.eq("id", data.examId);
+    else if (student.form_id) examQuery = examQuery.eq("form_id", student.form_id);
     const { data: exams } = await examQuery.limit(1);
     const exam = exams?.[0];
     if (!exam) return { school, student, exam: null, marks: [] };

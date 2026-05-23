@@ -1,5 +1,15 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, Users, ClipboardList, Megaphone, ExternalLink, LogOut, GraduationCap } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  ClipboardList,
+  Megaphone,
+  ExternalLink,
+  LogOut,
+  GraduationCap,
+  BookOpen,
+  Settings,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,9 +28,11 @@ export function ManageShell({
 
   const items = [
     { to: `/manage/${schoolSlug}`, label: "Overview", icon: LayoutDashboard, exact: true },
+    { to: `/manage/${schoolSlug}/academics`, label: "Academics", icon: BookOpen },
     { to: `/manage/${schoolSlug}/students`, label: "Students", icon: Users },
     { to: `/manage/${schoolSlug}/exams`, label: "Exams & Marks", icon: ClipboardList },
     { to: `/manage/${schoolSlug}/announcements`, label: "Announcements", icon: Megaphone },
+    { to: `/manage/${schoolSlug}/settings`, label: "Settings", icon: Settings },
   ];
 
   async function logout() {

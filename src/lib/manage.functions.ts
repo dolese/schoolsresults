@@ -210,6 +210,16 @@ export const createExam = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const school = await resolveSchoolId(supabase, data.slug);
+    const { data: subjects, error: subjectsErr } = await supabase
+      .from("subjects")
+      .select("id")
+      .eq("school_id", school.id)
+      .in("id", data.subject_ids);
+    if (subjectsErr) throw new Error(subjectsErr.message);
+    if ((subjects ?? []).length !== data.subject_ids.length) {
+      throw new Error("One or more selected subjects do not belong to this school");
+    }
+
     const { data: exam, error } = await supabase
       .from("exams")
       .insert({
@@ -351,11 +361,40 @@ export const saveMarksBulk = createServerFn({ method: "POST" })
     // Verify exam belongs to school
     const { data: exam } = await supabase
       .from("exams")
-      .select("id")
+      .select("id, form_id")
       .eq("id", data.examId)
       .eq("school_id", school.id)
       .maybeSingle();
     if (!exam) throw new Error("Exam not found");
+
+    const [{ data: examSubjects, error: examSubjectsErr }, { data: students, error: studentsErr }] =
+      await Promise.all([
+        supabase
+          .from("exam_subjects")
+          .select("subject_id")
+          .eq("exam_id", data.examId),
+        (() => {
+          let q = supabase
+            .from("students")
+            .select("id")
+            .eq("school_id", school.id);
+          if (exam.form_id) q = q.eq("form_id", exam.form_id);
+          return q;
+        })(),
+      ]);
+
+    if (examSubjectsErr) throw new Error(examSubjectsErr.message);
+    if (studentsErr) throw new Error(studentsErr.message);
+
+    const allowedSubjectIds = new Set((examSubjects ?? []).map((row) => row.subject_id));
+    const allowedStudentIds = new Set((students ?? []).map((row) => row.id));
+    const invalidEntries = data.entries.filter(
+      (entry) =>
+        !allowedSubjectIds.has(entry.subject_id) || !allowedStudentIds.has(entry.student_id),
+    );
+    if (invalidEntries.length > 0) {
+      throw new Error("Some submitted marks do not belong to this exam or school");
+    }
 
     const toClear = data.entries.filter((e) => e.score === null);
     const toUpsert = data.entries.filter((e) => e.score !== null);
@@ -486,10 +525,14 @@ export const bulkImportMarks = createServerFn({ method: "POST" })
         .from("exam_subjects")
         .select("subject_id, subjects(id, name, code)")
         .eq("exam_id", exam.id),
-      supabase
-        .from("students")
-        .select("id, admission_no")
-        .eq("school_id", school.id),
+      (() => {
+        let q = supabase
+          .from("students")
+          .select("id, admission_no")
+          .eq("school_id", school.id);
+        if (exam.form_id) q = q.eq("form_id", exam.form_id);
+        return q;
+      })(),
     ]);
 
     const subjectByKey = new Map<string, string>();
@@ -499,20 +542,30 @@ export const bulkImportMarks = createServerFn({ method: "POST" })
       subjectByKey.set(sub.name.toLowerCase().trim(), sub.id);
       if (sub.code) subjectByKey.set(sub.code.toLowerCase().trim(), sub.id);
     }
-    const studentByAdm = new Map(
-      (students ?? []).map((s) => [s.admission_no.toLowerCase().trim(), s.id as string]),
-    );
+    const studentIdsByAdm = new Map<string, string[]>();
+    for (const student of students ?? []) {
+      const key = student.admission_no.toLowerCase().trim();
+      const ids = studentIdsByAdm.get(key) ?? [];
+      ids.push(student.id as string);
+      studentIdsByAdm.set(key, ids);
+    }
 
     const upserts: { exam_id: string; student_id: string; subject_id: string; score: number }[] = [];
     const unmatchedStudents: string[] = [];
+    const ambiguousStudents: string[] = [];
     const unmatchedSubjects = new Set<string>();
 
     for (const r of data.rows) {
-      const sid = studentByAdm.get(r.admission_no.toLowerCase().trim());
-      if (!sid) {
+      const candidateIds = studentIdsByAdm.get(r.admission_no.toLowerCase().trim()) ?? [];
+      if (candidateIds.length === 0) {
         unmatchedStudents.push(r.admission_no);
         continue;
       }
+      if (candidateIds.length > 1) {
+        ambiguousStudents.push(r.admission_no);
+        continue;
+      }
+      const sid = candidateIds[0];
       for (const [key, score] of Object.entries(r.scores)) {
         if (score === null || score === undefined) continue;
         const subjectId = subjectByKey.get(key.toLowerCase().trim());
@@ -539,6 +592,7 @@ export const bulkImportMarks = createServerFn({ method: "POST" })
     return {
       saved: upserts.length,
       unmatchedStudents,
+      ambiguousStudents,
       unmatchedSubjects: Array.from(unmatchedSubjects),
     };
   });

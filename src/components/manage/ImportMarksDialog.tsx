@@ -38,7 +38,12 @@ function parseMarksSheet(file: File): Promise<MarkRow[]> {
           for (const [rawKey, v] of Object.entries(r)) {
             const key = normalizeHeader(rawKey);
             const norm = key.toLowerCase().replace(/[^a-z0-9]/g, "");
-            if (norm === "admissionno" || norm === "admno" || norm === "adm" || norm === "admission") {
+            if (
+              norm === "admissionno" ||
+              norm === "admno" ||
+              norm === "adm" ||
+              norm === "admission"
+            ) {
               admission = String(v).trim();
               continue;
             }
@@ -63,10 +68,7 @@ function parseMarksSheet(file: File): Promise<MarkRow[]> {
 
 function downloadTemplate(subjects: { name: string; code: string | null }[]) {
   const header = ["Admission No", "Full Name", ...subjects.map((s) => s.code ?? s.name)];
-  const ws = XLSX.utils.aoa_to_sheet([
-    header,
-    ["S001", "Jane Doe", ...subjects.map(() => 75)],
-  ]);
+  const ws = XLSX.utils.aoa_to_sheet([header, ["S001", "Jane Doe", ...subjects.map(() => 75)]]);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Marks");
   XLSX.writeFile(wb, "marks-template.xlsx");
@@ -90,14 +92,18 @@ export function ImportMarksDialog({
   const [filename, setFilename] = useState("");
 
   const mutation = useMutation({
-    mutationFn: () =>
-      importFn({ data: { slug: schoolSlug, examId, rows: rows ?? [] } }),
+    mutationFn: () => importFn({ data: { slug: schoolSlug, examId, rows: rows ?? [] } }),
     onSuccess: (r) => {
       let msg = `Imported ${r.saved} marks`;
-      if (r.unmatchedStudents.length)
-        msg += ` · skipped ${r.unmatchedStudents.length} unknown students`;
-      if (r.unmatchedSubjects.length)
-        msg += ` · unknown subjects: ${r.unmatchedSubjects.join(", ")}`;
+      if (r.unmatchedStudents.length) {
+        msg += ` - skipped ${r.unmatchedStudents.length} unknown students`;
+      }
+      if (r.ambiguousStudents.length) {
+        msg += ` - skipped ${r.ambiguousStudents.length} ambiguous students`;
+      }
+      if (r.unmatchedSubjects.length) {
+        msg += ` - unknown subjects: ${r.unmatchedSubjects.join(", ")}`;
+      }
       toast.success(msg);
       qc.invalidateQueries({ queryKey: ["marks-grid", schoolSlug, examId] });
       onImported?.();
@@ -142,12 +148,7 @@ export function ImportMarksDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => downloadTemplate(subjects)}
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => downloadTemplate(subjects)}>
             <Download className="mr-2 h-4 w-4" /> Download template for this exam
           </Button>
 
@@ -161,7 +162,7 @@ export function ImportMarksDialog({
             />
             {filename && (
               <p className="mt-2 text-xs text-muted-foreground">
-                {filename} — {rows?.length ?? 0} student rows
+                {filename} - {rows?.length ?? 0} student rows
               </p>
             )}
           </div>
@@ -172,7 +173,7 @@ export function ImportMarksDialog({
             onClick={() => mutation.mutate()}
             className="bg-brand text-brand-foreground hover:bg-brand/90"
           >
-            {mutation.isPending ? "Importing…" : `Import marks for ${rows?.length ?? 0} students`}
+            {mutation.isPending ? "Importing..." : `Import marks for ${rows?.length ?? 0} students`}
           </Button>
         </DialogFooter>
       </DialogContent>
