@@ -8,13 +8,14 @@ export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
   validateSearch: (search: Record<string, unknown>) => ({
     examId: typeof search.examId === "string" ? search.examId : undefined,
   }),
-  loader: async ({ params, search }) => {
+  loaderDeps: ({ search }) => ({ examId: search.examId }),
+  loader: async ({ params, deps }) => {
     try {
       return await getPublicStudentResult({
         data: {
           slug: params.schoolSlug,
           studentId: params.studentId,
-          examId: search.examId ?? null,
+          examId: deps.examId ?? null,
         },
       });
     } catch {
