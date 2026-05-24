@@ -20,11 +20,11 @@ import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/ap
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
 import { Route as AuthenticatedManageSchoolSlugIndexRouteImport } from './routes/_authenticated/manage.$schoolSlug.index'
-import { Route as AuthenticatedManageSchoolSlugAcademicsRouteImport } from './routes/_authenticated/manage.$schoolSlug.academics'
 import { Route as AuthenticatedManageSchoolSlugStudentsRouteImport } from './routes/_authenticated/manage.$schoolSlug.students'
+import { Route as AuthenticatedManageSchoolSlugSettingsRouteImport } from './routes/_authenticated/manage.$schoolSlug.settings'
 import { Route as AuthenticatedManageSchoolSlugExamsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams'
 import { Route as AuthenticatedManageSchoolSlugAnnouncementsRouteImport } from './routes/_authenticated/manage.$schoolSlug.announcements'
-import { Route as AuthenticatedManageSchoolSlugSettingsRouteImport } from './routes/_authenticated/manage.$schoolSlug.settings'
+import { Route as AuthenticatedManageSchoolSlugAcademicsRouteImport } from './routes/_authenticated/manage.$schoolSlug.academics'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -84,16 +84,16 @@ const AuthenticatedManageSchoolSlugIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
-const AuthenticatedManageSchoolSlugAcademicsRoute =
-  AuthenticatedManageSchoolSlugAcademicsRouteImport.update({
-    id: '/academics',
-    path: '/academics',
-    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
-  } as any)
 const AuthenticatedManageSchoolSlugStudentsRoute =
   AuthenticatedManageSchoolSlugStudentsRouteImport.update({
     id: '/students',
     path: '/students',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugSettingsRoute =
+  AuthenticatedManageSchoolSlugSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugExamsRoute =
@@ -108,10 +108,10 @@ const AuthenticatedManageSchoolSlugAnnouncementsRoute =
     path: '/announcements',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
-const AuthenticatedManageSchoolSlugSettingsRoute =
-  AuthenticatedManageSchoolSlugSettingsRouteImport.update({
-    id: '/settings',
-    path: '/settings',
+const AuthenticatedManageSchoolSlugAcademicsRoute =
+  AuthenticatedManageSchoolSlugAcademicsRouteImport.update({
+    id: '/academics',
+    path: '/academics',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugExamsExamIdRoute =
@@ -322,18 +322,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugIndexRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
-    '/_authenticated/manage/$schoolSlug/academics': {
-      id: '/_authenticated/manage/$schoolSlug/academics'
-      path: '/academics'
-      fullPath: '/manage/$schoolSlug/academics'
-      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAcademicsRouteImport
-      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
-    }
     '/_authenticated/manage/$schoolSlug/students': {
       id: '/_authenticated/manage/$schoolSlug/students'
       path: '/students'
       fullPath: '/manage/$schoolSlug/students'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugStudentsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/settings': {
+      id: '/_authenticated/manage/$schoolSlug/settings'
+      path: '/settings'
+      fullPath: '/manage/$schoolSlug/settings'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugSettingsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/exams': {
@@ -350,11 +350,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
-    '/_authenticated/manage/$schoolSlug/settings': {
-      id: '/_authenticated/manage/$schoolSlug/settings'
-      path: '/settings'
-      fullPath: '/manage/$schoolSlug/settings'
-      preLoaderRoute: typeof AuthenticatedManageSchoolSlugSettingsRouteImport
+    '/_authenticated/manage/$schoolSlug/academics': {
+      id: '/_authenticated/manage/$schoolSlug/academics'
+      path: '/academics'
+      fullPath: '/manage/$schoolSlug/academics'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAcademicsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/exams/$examId': {
@@ -441,3 +441,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
