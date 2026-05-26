@@ -39,7 +39,7 @@ export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
 });
 
 function ResultPage() {
-  const { school, student, exam, marks } = Route.useLoaderData();
+  const { school, student, exam, marks, rank, cohortSize } = Route.useLoaderData();
   const scores = (marks as Array<{ subject: string; code: string | null; score: number }>).map(
     (mark) => mark.score,
   );
@@ -133,7 +133,7 @@ function ResultPage() {
                 </tbody>
               </table>
 
-              <div className="mt-6 grid grid-cols-3 gap-4 rounded-xl bg-secondary p-4 text-center">
+              <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl bg-secondary p-4 text-center md:grid-cols-4">
                 <div>
                   <div className="text-xs text-muted-foreground">Total</div>
                   <div className="font-display text-xl font-bold">{total.toFixed(0)}</div>
@@ -146,6 +146,12 @@ function ResultPage() {
                   <div className="text-xs text-muted-foreground">Division</div>
                   <div className="font-display text-xl font-bold text-brand">
                     {div ? `Div ${div.division}` : "-"}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-muted-foreground">Position</div>
+                  <div className="font-display text-xl font-bold">
+                    {rank ? `${rank}/${cohortSize}` : "-"}
                   </div>
                 </div>
               </div>
