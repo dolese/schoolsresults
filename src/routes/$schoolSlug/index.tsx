@@ -352,8 +352,11 @@ function PublicSchoolPage() {
               </p>
             </div>
             <Button asChild variant="ghost" className="hidden md:inline-flex">
-              <Link to="/login" search={{ redirect: `/manage/${school.slug}/announcements` } as never}>
-                Staff dashboard <ArrowRight className="ml-2 h-4 w-4" />
+              <Link
+                to="/$schoolSlug/announcements"
+                params={{ schoolSlug: school.slug }}
+              >
+                View all <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
