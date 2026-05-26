@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SchoolSlugIndexRouteImport } from './routes/$schoolSlug/index'
 import { Route as AuthenticatedSuperRouteImport } from './routes/_authenticated/super'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as SchoolSlugAnnouncementsRouteImport } from './routes/$schoolSlug/announcements'
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
 import { Route as AuthenticatedManageSchoolSlugIndexRouteImport } from './routes/_authenticated/manage.$schoolSlug.index'
@@ -65,6 +66,11 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const SchoolSlugAnnouncementsRoute = SchoolSlugAnnouncementsRouteImport.update({
+  id: '/$schoolSlug/announcements',
+  path: '/$schoolSlug/announcements',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedManageSchoolSlugRoute =
   AuthenticatedManageSchoolSlugRouteImport.update({
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
   '/app': typeof AuthenticatedAppRoute
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
   '/app': typeof AuthenticatedAppRoute
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
+  '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
+    | '/$schoolSlug/announcements'
     | '/app'
     | '/super'
     | '/$schoolSlug/'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
+    | '/$schoolSlug/announcements'
     | '/app'
     | '/super'
     | '/$schoolSlug'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pricing'
     | '/signup'
+    | '/$schoolSlug/announcements'
     | '/_authenticated/app'
     | '/_authenticated/super'
     | '/$schoolSlug/'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
+  SchoolSlugAnnouncementsRoute: typeof SchoolSlugAnnouncementsRoute
   SchoolSlugIndexRoute: typeof SchoolSlugIndexRoute
   SchoolSlugResultsStudentIdRoute: typeof SchoolSlugResultsStudentIdRoute
 }
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/$schoolSlug/announcements': {
+      id: '/$schoolSlug/announcements'
+      path: '/$schoolSlug/announcements'
+      fullPath: '/$schoolSlug/announcements'
+      preLoaderRoute: typeof SchoolSlugAnnouncementsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/manage/$schoolSlug': {
       id: '/_authenticated/manage/$schoolSlug'
@@ -435,6 +455,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
+  SchoolSlugAnnouncementsRoute: SchoolSlugAnnouncementsRoute,
   SchoolSlugIndexRoute: SchoolSlugIndexRoute,
   SchoolSlugResultsStudentIdRoute: SchoolSlugResultsStudentIdRoute,
 }
