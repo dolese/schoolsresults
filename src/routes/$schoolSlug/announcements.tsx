@@ -66,7 +66,7 @@ function AnnouncementsPage() {
           </div>
         ) : (
           <ol className="space-y-4">
-            {announcements.map((a) => (
+            {announcements.map((a: { id: string; title: string; body: string; published_at: string }) => (
               <li
                 key={a.id}
                 className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm"
