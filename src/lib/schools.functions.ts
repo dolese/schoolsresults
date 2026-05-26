@@ -287,14 +287,55 @@ export const getPublicStudentResult = createServerFn({ method: "POST" })
       .eq("exam_id", exam.id)
       .eq("student_id", student.id);
 
+    // Compute class ranking by total score across all students in the same form for this exam.
+    let rank: number | null = null;
+    let cohortSize: number | null = null;
+    if (exam.form_id) {
+      const { data: cohortMarks } = await supabaseAdmin
+        .from("marks")
+        .select("student_id, score, students!inner(form_id)")
+        .eq("exam_id", exam.id)
+        .eq("students.form_id", exam.form_id);
+      const totals = new Map<string, number>();
+      for (const m of cohortMarks ?? []) {
+        totals.set(m.student_id, (totals.get(m.student_id) ?? 0) + Number(m.score ?? 0));
+      }
+      const ranked = Array.from(totals.entries()).sort((a, b) => b[1] - a[1]);
+      cohortSize = ranked.length;
+      const idx = ranked.findIndex(([sid]) => sid === student.id);
+      rank = idx >= 0 ? idx + 1 : null;
+    }
+
     return {
       school,
       student,
       exam,
+      rank,
+      cohortSize,
       marks: (marks ?? []).map((m) => ({
         subject: (m.subjects as { name: string } | null)?.name ?? "",
         code: (m.subjects as { code: string | null } | null)?.code ?? null,
         score: Number(m.score ?? 0),
       })),
     };
+  });
+
+export const getPublicAnnouncements = createServerFn({ method: "GET" })
+  .inputValidator((input) => z.object({ slug: slugSchema }).parse(input))
+  .handler(async ({ data }) => {
+    const { data: school } = await supabaseAdmin
+      .from("schools")
+      .select("id, name, slug, logo_url, motto")
+      .eq("slug", data.slug)
+      .eq("status", "active")
+      .maybeSingle();
+    if (!school) return null;
+    const { data: announcements, error } = await supabaseAdmin
+      .from("announcements")
+      .select("id, title, body, published_at")
+      .eq("school_id", school.id)
+      .order("published_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return { school, announcements: announcements ?? [] };
   });
