@@ -596,3 +596,54 @@ export const bulkImportMarks = createServerFn({ method: "POST" })
       unmatchedSubjects: Array.from(unmatchedSubjects),
     };
   });
+
+/* ---------------- Analytics ---------------- */
+
+export const getExamAnalytics = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ slug: slugSchema, examId: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase } = context;
+    const school = await resolveSchoolId(supabase, data.slug);
+    const { data: exam, error: examErr } = await supabase
+      .from("exams")
+      .select("id, name, type, year, form_id, published, forms(name, level)")
+      .eq("id", data.examId)
+      .eq("school_id", school.id)
+      .maybeSingle();
+    if (examErr) throw new Error(examErr.message);
+    if (!exam) throw new Error("Exam not found");
+
+    const [{ data: examSubjects }, { data: students }, { data: marks }] = await Promise.all([
+      supabase
+        .from("exam_subjects")
+        .select("subject_id, subjects(id, name, code)")
+        .eq("exam_id", exam.id),
+      supabase
+        .from("students")
+        .select("id, admission_no, full_name")
+        .eq("school_id", school.id)
+        .eq("form_id", exam.form_id!),
+      supabase
+        .from("marks")
+        .select("student_id, subject_id, score")
+        .eq("exam_id", exam.id),
+    ]);
+
+    return {
+      school,
+      exam,
+      subjects: (examSubjects ?? []).map((es) => {
+        const s = es.subjects as { id: string; name: string; code: string | null } | null;
+        return { id: s?.id ?? es.subject_id, name: s?.name ?? "", code: s?.code ?? null };
+      }),
+      students: students ?? [],
+      marks: (marks ?? []).map((m) => ({
+        student_id: m.student_id,
+        subject_id: m.subject_id,
+        score: m.score == null ? null : Number(m.score),
+      })),
+    };
+  });
