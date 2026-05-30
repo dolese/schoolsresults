@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Plus, Trash2, FileSpreadsheet } from "lucide-react";
+import { Plus, Trash2, FileSpreadsheet, BarChart3 } from "lucide-react";
 import {
   listExams,
   createExam,
@@ -216,6 +216,14 @@ function ExamsPage() {
                 <Button asChild size="sm" variant="outline">
                   <Link to="/manage/$schoolSlug/exams/$examId" params={{ schoolSlug, examId: e.id }}>
                     <FileSpreadsheet className="mr-2 h-4 w-4" /> Marks
+                  </Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link
+                    to="/manage/$schoolSlug/exams/$examId/analytics"
+                    params={{ schoolSlug, examId: e.id }}
+                  >
+                    <BarChart3 className="mr-2 h-4 w-4" /> Analytics
                   </Link>
                 </Button>
                 <Button
