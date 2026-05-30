@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, BarChart3 } from "lucide-react";
 import { getExamMarksGrid, saveMarksBulk } from "@/lib/manage.functions";
 import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
@@ -118,6 +118,14 @@ function MarksEntry() {
           examId={examId}
           subjects={grid.data.subjects.map((s) => ({ name: s.name, code: s.code }))}
         />
+        <Button asChild variant="outline">
+          <Link
+            to="/manage/$schoolSlug/exams/$examId/analytics"
+            params={{ schoolSlug, examId }}
+          >
+            <BarChart3 className="mr-2 h-4 w-4" /> Analytics
+          </Link>
+        </Button>
         <Button
           onClick={() => save.mutate()}
           disabled={!dirty || save.isPending}
