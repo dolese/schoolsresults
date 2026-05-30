@@ -27,6 +27,7 @@ import { Route as AuthenticatedManageSchoolSlugExamsRouteImport } from './routes
 import { Route as AuthenticatedManageSchoolSlugAnnouncementsRouteImport } from './routes/_authenticated/manage.$schoolSlug.announcements'
 import { Route as AuthenticatedManageSchoolSlugAcademicsRouteImport } from './routes/_authenticated/manage.$schoolSlug.academics'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId'
+import { Route as AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId.analytics'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -126,6 +127,12 @@ const AuthenticatedManageSchoolSlugExamsExamIdRoute =
     path: '/$examId',
     getParentRoute: () => AuthenticatedManageSchoolSlugExamsRoute,
   } as any)
+const AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute =
+  AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRouteImport.update({
+    id: '/analytics',
+    path: '/analytics',
+    getParentRoute: () => AuthenticatedManageSchoolSlugExamsExamIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -144,7 +151,8 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
-  '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
+  '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren
+  '/manage/$schoolSlug/exams/$examId/analytics': typeof AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -162,7 +170,8 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugIndexRoute
-  '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
+  '/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren
+  '/manage/$schoolSlug/exams/$examId/analytics': typeof AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -183,7 +192,8 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/_authenticated/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRoute
   '/_authenticated/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
-  '/_authenticated/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
+  '/_authenticated/manage/$schoolSlug/exams/$examId': typeof AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren
+  '/_authenticated/manage/$schoolSlug/exams/$examId/analytics': typeof AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug/'
     | '/manage/$schoolSlug/exams/$examId'
+    | '/manage/$schoolSlug/exams/$examId/analytics'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -223,6 +234,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/students'
     | '/manage/$schoolSlug'
     | '/manage/$schoolSlug/exams/$examId'
+    | '/manage/$schoolSlug/exams/$examId/analytics'
   id:
     | '__root__'
     | '/'
@@ -243,6 +255,7 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/students'
     | '/_authenticated/manage/$schoolSlug/'
     | '/_authenticated/manage/$schoolSlug/exams/$examId'
+    | '/_authenticated/manage/$schoolSlug/exams/$examId/analytics'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -384,17 +397,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugExamsRoute
     }
+    '/_authenticated/manage/$schoolSlug/exams/$examId/analytics': {
+      id: '/_authenticated/manage/$schoolSlug/exams/$examId/analytics'
+      path: '/analytics'
+      fullPath: '/manage/$schoolSlug/exams/$examId/analytics'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
+    }
   }
 }
 
+interface AuthenticatedManageSchoolSlugExamsExamIdRouteChildren {
+  AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute
+}
+
+const AuthenticatedManageSchoolSlugExamsExamIdRouteChildren: AuthenticatedManageSchoolSlugExamsExamIdRouteChildren =
+  {
+    AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute:
+      AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRoute,
+  }
+
+const AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren =
+  AuthenticatedManageSchoolSlugExamsExamIdRoute._addFileChildren(
+    AuthenticatedManageSchoolSlugExamsExamIdRouteChildren,
+  )
+
 interface AuthenticatedManageSchoolSlugExamsRouteChildren {
-  AuthenticatedManageSchoolSlugExamsExamIdRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdRoute
+  AuthenticatedManageSchoolSlugExamsExamIdRoute: typeof AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren
 }
 
 const AuthenticatedManageSchoolSlugExamsRouteChildren: AuthenticatedManageSchoolSlugExamsRouteChildren =
   {
     AuthenticatedManageSchoolSlugExamsExamIdRoute:
-      AuthenticatedManageSchoolSlugExamsExamIdRoute,
+      AuthenticatedManageSchoolSlugExamsExamIdRouteWithChildren,
   }
 
 const AuthenticatedManageSchoolSlugExamsRouteWithChildren =
