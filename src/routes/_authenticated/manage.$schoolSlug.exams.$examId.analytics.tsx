@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { ArrowLeft, Download, Trophy, Users, TrendingUp, Award } from "lucide-react";
+import { ArrowLeft, Download, Trophy, Users, TrendingUp, Award, FileText } from "lucide-react";
 import { getExamAnalytics } from "@/lib/manage.functions";
 import { gradeFor, computeDivision, NECTA_SCALE } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
@@ -122,6 +122,14 @@ function AnalyticsPage() {
         <div className="flex gap-2">
           <Button variant="outline" onClick={exportCsv}>
             <Download className="mr-2 h-4 w-4" /> Export CSV
+          </Button>
+          <Button asChild variant="outline">
+            <Link
+              to="/manage/$schoolSlug/exams/$examId/reports"
+              params={{ schoolSlug, examId }}
+            >
+              <FileText className="mr-2 h-4 w-4" /> Report cards
+            </Link>
           </Button>
           <Button asChild variant="outline">
             <Link to="/manage/$schoolSlug/exams/$examId" params={{ schoolSlug, examId }}>

@@ -149,5 +149,7 @@
   body { background: white !important; color: black !important; }
   .no-print { display: none !important; }
   .print-area { box-shadow: none !important; border: none !important; }
+  .report-card { break-after: page; page-break-after: always; }
+  .report-card:last-child { break-after: auto; page-break-after: auto; }
   @page { margin: 14mm; }
 }
