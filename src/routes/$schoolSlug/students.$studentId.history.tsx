@@ -39,15 +39,24 @@ export const Route = createFileRoute("/$schoolSlug/students/$studentId/history")
 function HistoryPage() {
   const { school, student, history } = Route.useLoaderData();
 
-  const rows = history.map((h) => {
+  type ExamRow = {
+    id: string;
+    name: string;
+    year: number;
+    type: string;
+    created_at: string;
+    scores: { subject: string; code: string | null; score: number }[];
+  };
+  const rows = (history as ExamRow[]).map((h) => {
     const scores = h.scores.map((s) => s.score);
     const total = scores.reduce((a, b) => a + b, 0);
     const avg = scores.length ? total / scores.length : 0;
     const div = scores.length >= 4 ? computeDivision(scores) : null;
     return { ...h, total, avg, division: div };
   });
+  type Row = (typeof rows)[number];
 
-  const best = rows.reduce<typeof rows[number] | null>(
+  const best: Row | null = rows.reduce<Row | null>(
     (a, b) => (a == null || b.avg > a.avg ? b : a),
     null,
   );
