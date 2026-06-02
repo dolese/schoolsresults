@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft, Printer, LineChart } from "lucide-react";
 import { getPublicStudentResult } from "@/lib/schools.functions";
 import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
@@ -56,9 +56,19 @@ function ResultPage() {
           </Link>
         </Button>
         <div className="mb-3 flex justify-end no-print">
-          <Button size="sm" variant="outline" onClick={() => window.print()}>
-            <Printer className="mr-2 h-4 w-4" /> Print / Save as PDF
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild size="sm" variant="outline">
+              <Link
+                to="/$schoolSlug/students/$studentId/history"
+                params={{ schoolSlug: school.slug, studentId: student.id }}
+              >
+                <LineChart className="mr-2 h-4 w-4" /> View progress
+              </Link>
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => window.print()}>
+              <Printer className="mr-2 h-4 w-4" /> Print / Save as PDF
+            </Button>
+          </div>
         </div>
         <div className="print-area rounded-3xl border border-border/60 bg-card p-8 shadow-xl">
           <div className="flex items-start justify-between border-b border-border/60 pb-6">

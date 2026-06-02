@@ -339,3 +339,76 @@ export const getPublicAnnouncements = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return { school, announcements: announcements ?? [] };
   });
+
+export const getPublicStudentHistory = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({ slug: slugSchema, studentId: z.string().uuid() })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { data: school } = await supabaseAdmin
+      .from("schools")
+      .select("id, name, slug, logo_url, motto")
+      .eq("slug", data.slug)
+      .eq("status", "active")
+      .maybeSingle();
+    if (!school) throw new Error("School not found");
+
+    const { data: student } = await supabaseAdmin
+      .from("students")
+      .select("id, admission_no, full_name, year, school_id, forms(name, level), streams(name)")
+      .eq("id", data.studentId)
+      .maybeSingle();
+    if (!student || student.school_id !== school.id) throw new Error("Student not found");
+
+    const { data: marks } = await supabaseAdmin
+      .from("marks")
+      .select("score, exam_id, subjects(name, code), exams!inner(id, name, year, type, published, school_id, created_at)")
+      .eq("student_id", student.id)
+      .eq("exams.school_id", school.id)
+      .eq("exams.published", true);
+
+    const byExam = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        year: number;
+        type: string;
+        created_at: string;
+        scores: { subject: string; code: string | null; score: number }[];
+      }
+    >();
+    for (const m of marks ?? []) {
+      const exam = m.exams as {
+        id: string;
+        name: string;
+        year: number;
+        type: string;
+        created_at: string;
+      } | null;
+      if (!exam || m.score == null) continue;
+      if (!byExam.has(exam.id)) {
+        byExam.set(exam.id, {
+          id: exam.id,
+          name: exam.name,
+          year: exam.year,
+          type: exam.type,
+          created_at: exam.created_at,
+          scores: [],
+        });
+      }
+      byExam.get(exam.id)!.scores.push({
+        subject: (m.subjects as { name: string } | null)?.name ?? "",
+        code: (m.subjects as { code: string | null } | null)?.code ?? null,
+        score: Number(m.score),
+      });
+    }
+
+    const history = Array.from(byExam.values()).sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+
+    return { school, student, history };
+  });
