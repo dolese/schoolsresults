@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SchoolSlugIndexRouteImport } from './routes/$schoolSlug/index'
 import { Route as AuthenticatedSuperRouteImport } from './routes/_authenticated/super'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as SchoolSlugLeaderboardRouteImport } from './routes/$schoolSlug/leaderboard'
 import { Route as SchoolSlugAnnouncementsRouteImport } from './routes/$schoolSlug/announcements'
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
@@ -69,6 +70,11 @@ const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const SchoolSlugLeaderboardRoute = SchoolSlugLeaderboardRouteImport.update({
+  id: '/$schoolSlug/leaderboard',
+  path: '/$schoolSlug/leaderboard',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolSlugAnnouncementsRoute = SchoolSlugAnnouncementsRouteImport.update({
   id: '/$schoolSlug/announcements',
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
+  '/$schoolSlug/leaderboard': typeof SchoolSlugLeaderboardRoute
   '/app': typeof AuthenticatedAppRoute
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
+  '/$schoolSlug/leaderboard': typeof SchoolSlugLeaderboardRoute
   '/app': typeof AuthenticatedAppRoute
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/signup': typeof SignupRoute
   '/$schoolSlug/announcements': typeof SchoolSlugAnnouncementsRoute
+  '/$schoolSlug/leaderboard': typeof SchoolSlugLeaderboardRoute
   '/_authenticated/app': typeof AuthenticatedAppRoute
   '/_authenticated/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/$schoolSlug/announcements'
+    | '/$schoolSlug/leaderboard'
     | '/app'
     | '/super'
     | '/$schoolSlug/'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/$schoolSlug/announcements'
+    | '/$schoolSlug/leaderboard'
     | '/app'
     | '/super'
     | '/$schoolSlug'
@@ -267,6 +278,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/signup'
     | '/$schoolSlug/announcements'
+    | '/$schoolSlug/leaderboard'
     | '/_authenticated/app'
     | '/_authenticated/super'
     | '/$schoolSlug/'
@@ -291,6 +303,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   SignupRoute: typeof SignupRoute
   SchoolSlugAnnouncementsRoute: typeof SchoolSlugAnnouncementsRoute
+  SchoolSlugLeaderboardRoute: typeof SchoolSlugLeaderboardRoute
   SchoolSlugIndexRoute: typeof SchoolSlugIndexRoute
   SchoolSlugResultsStudentIdRoute: typeof SchoolSlugResultsStudentIdRoute
   SchoolSlugStudentsStudentIdHistoryRoute: typeof SchoolSlugStudentsStudentIdHistoryRoute
@@ -353,6 +366,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app'
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/$schoolSlug/leaderboard': {
+      id: '/$schoolSlug/leaderboard'
+      path: '/$schoolSlug/leaderboard'
+      fullPath: '/$schoolSlug/leaderboard'
+      preLoaderRoute: typeof SchoolSlugLeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/$schoolSlug/announcements': {
       id: '/$schoolSlug/announcements'
@@ -535,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SignupRoute: SignupRoute,
   SchoolSlugAnnouncementsRoute: SchoolSlugAnnouncementsRoute,
+  SchoolSlugLeaderboardRoute: SchoolSlugLeaderboardRoute,
   SchoolSlugIndexRoute: SchoolSlugIndexRoute,
   SchoolSlugResultsStudentIdRoute: SchoolSlugResultsStudentIdRoute,
   SchoolSlugStudentsStudentIdHistoryRoute:
@@ -543,3 +564,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
