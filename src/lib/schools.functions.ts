@@ -412,3 +412,116 @@ export const getPublicStudentHistory = createServerFn({ method: "POST" })
 
     return { school, student, history };
   });
+
+export const getPublicLeaderboard = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        slug: slugSchema,
+        examId: z.string().uuid().optional().nullable(),
+        limit: z.coerce.number().int().min(5).max(100).default(25),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { data: school } = await supabaseAdmin
+      .from("schools")
+      .select("id, name, slug, logo_url, motto")
+      .eq("slug", data.slug)
+      .eq("status", "active")
+      .maybeSingle();
+    if (!school) throw new Error("School not found");
+
+    const { data: publishedExams } = await supabaseAdmin
+      .from("exams")
+      .select("id, name, year, type, form_id, forms(name, level)")
+      .eq("school_id", school.id)
+      .eq("published", true)
+      .order("created_at", { ascending: false });
+
+    const exam = data.examId
+      ? (publishedExams ?? []).find((e) => e.id === data.examId) ?? null
+      : (publishedExams ?? [])[0] ?? null;
+
+    if (!exam) {
+      return { school, exams: publishedExams ?? [], exam: null, entries: [] };
+    }
+
+    const { data: marks } = await supabaseAdmin
+      .from("marks")
+      .select(
+        "score, student_id, students!inner(id, admission_no, full_name, form_id, forms(name, level), streams(name))",
+      )
+      .eq("exam_id", exam.id);
+
+    const byStudent = new Map<
+      string,
+      {
+        id: string;
+        admission_no: string;
+        full_name: string;
+        form: string | null;
+        stream: string | null;
+        scores: number[];
+      }
+    >();
+    for (const m of marks ?? []) {
+      if (m.score == null) continue;
+      const s = m.students as {
+        id: string;
+        admission_no: string;
+        full_name: string;
+        forms: { name: string } | null;
+        streams: { name: string } | null;
+      } | null;
+      if (!s) continue;
+      if (!byStudent.has(s.id)) {
+        byStudent.set(s.id, {
+          id: s.id,
+          admission_no: s.admission_no,
+          full_name: s.full_name,
+          form: s.forms?.name ?? null,
+          stream: s.streams?.name ?? null,
+          scores: [],
+        });
+      }
+      byStudent.get(s.id)!.scores.push(Number(m.score));
+    }
+
+    const entries = Array.from(byStudent.values())
+      .map((s) => {
+        const total = s.scores.reduce((a, b) => a + b, 0);
+        const avg = s.scores.length ? total / s.scores.length : 0;
+        return {
+          id: s.id,
+          admission_no: s.admission_no,
+          full_name: s.full_name,
+          form: s.form,
+          stream: s.stream,
+          subjects: s.scores.length,
+          total,
+          avg,
+        };
+      })
+      .sort((a, b) => b.total - a.total)
+      .slice(0, data.limit);
+
+    return {
+      school,
+      exams: (publishedExams ?? []).map((e) => ({
+        id: e.id,
+        name: e.name,
+        year: e.year,
+        type: e.type,
+        form: (e.forms as { name: string } | null)?.name ?? null,
+      })),
+      exam: {
+        id: exam.id,
+        name: exam.name,
+        year: exam.year,
+        type: exam.type,
+        form: (exam.forms as { name: string } | null)?.name ?? null,
+      },
+      entries,
+    };
+  });
