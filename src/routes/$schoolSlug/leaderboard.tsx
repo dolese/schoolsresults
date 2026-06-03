@@ -18,6 +18,17 @@ const searchSchema = z.object({
   examId: z.string().optional(),
 });
 
+type LeaderEntry = {
+  id: string;
+  admission_no: string;
+  full_name: string;
+  form: string | null;
+  stream: string | null;
+  subjects: number;
+  total: number;
+  avg: number;
+};
+
 export const Route = createFileRoute("/$schoolSlug/leaderboard")({
   validateSearch: (s) => searchSchema.parse(s),
   loaderDeps: ({ search }) => ({ examId: search.examId ?? null }),
