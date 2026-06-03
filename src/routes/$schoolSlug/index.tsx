@@ -390,6 +390,29 @@ function PublicSchoolPage() {
             </div>
           )}
         </section>
+
+        <section className="mx-auto max-w-6xl px-4 pb-16">
+          <Link
+            to="/$schoolSlug/leaderboard"
+            params={{ schoolSlug: school.slug }}
+            className="group flex flex-col items-start justify-between gap-6 rounded-3xl border border-border/60 bg-gradient-to-br from-brand/10 via-card to-card p-8 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg md:flex-row md:items-center"
+          >
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full bg-brand/15 px-3 py-1 text-xs font-medium text-brand">
+                <Trophy className="h-3.5 w-3.5" /> Top performers
+              </div>
+              <h3 className="mt-3 font-display text-2xl font-semibold">
+                See who topped the latest exam
+              </h3>
+              <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+                A live leaderboard of the highest scorers across published exams at {school.name}.
+              </p>
+            </div>
+            <Button className="bg-brand text-brand-foreground hover:bg-brand/90 group-hover:translate-x-0.5">
+              View leaderboard <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </section>
       </main>
     </div>
   );
