@@ -89,7 +89,7 @@ function LeaderboardPage() {
                 <SelectValue placeholder="Choose an exam" />
               </SelectTrigger>
               <SelectContent>
-                {data.exams.map((e) => (
+                {data.exams.map((e: { id: string; name: string; year: number; form: string | null }) => (
                   <SelectItem key={e.id} value={e.id}>
                     {e.name} — {e.form ?? "All forms"} — {e.year}
                   </SelectItem>
@@ -116,7 +116,7 @@ function LeaderboardPage() {
         ) : (
           <>
             <div className="mb-6 grid gap-4 md:grid-cols-3">
-              {data.entries.slice(0, 3).map((e, i) => {
+              {data.entries.slice(0, 3).map((e: LeaderEntry, i: number) => {
                 const Icon = medals[i];
                 return (
                   <Link
@@ -169,7 +169,7 @@ function LeaderboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
-                  {data.entries.map((e, i) => (
+                  {data.entries.map((e: LeaderEntry, i: number) => (
                     <tr key={e.id} className="hover:bg-accent/20">
                       <td className="px-4 py-3 font-mono text-muted-foreground">{i + 1}</td>
                       <td className="px-4 py-3">
