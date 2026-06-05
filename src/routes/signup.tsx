@@ -1,7 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
-import { GraduationCap } from "lucide-react";
+import {
+  GraduationCap,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  Rocket,
+  Users,
+  BarChart3,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { createSchool } from "@/lib/schools.functions";
 import { slugify } from "@/lib/slug";
@@ -20,6 +29,7 @@ function SignupPage() {
   const createSchoolFn = useServerFn(createSchool);
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,15 +89,81 @@ function SignupPage() {
   }
 
   return (
-    <div className="grid min-h-screen place-items-center bg-background px-4 py-12">
-      <div className="w-full max-w-lg rounded-3xl border border-border/60 bg-card p-8 shadow-xl">
-        <Link to="/" className="mb-6 flex items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+    <div className="grid min-h-screen bg-background lg:grid-cols-2">
+      {/* Brand panel */}
+      <aside className="relative hidden overflow-hidden bg-primary text-primary-foreground lg:flex lg:flex-col lg:justify-between lg:p-12">
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 15% 15%, var(--color-brand) 0, transparent 40%), radial-gradient(circle at 85% 85%, var(--color-accent) 0, transparent 45%)",
+          }}
+        />
+        <Link to="/" className="relative z-10 flex items-center gap-2">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand text-brand-foreground">
             <GraduationCap className="h-5 w-5" />
           </span>
-          <span className="font-display font-semibold">SchoolsResultsPortal</span>
+          <span className="font-display text-lg font-semibold tracking-tight">
+            SchoolsResultsPortal
+          </span>
         </Link>
-        <div className="mb-6 flex items-center gap-2 text-xs">
+
+        <div className="relative z-10 max-w-md">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-primary-foreground/70">
+            Launch in minutes
+          </p>
+          <h2 className="mt-4 font-display text-4xl leading-[1.05]">
+            Your school's results portal — set up in under five minutes.
+          </h2>
+          <p className="mt-4 text-sm text-primary-foreground/75">
+            Create your account, claim your portal URL, and start publishing
+            transparent, beautiful results that parents and students can trust.
+          </p>
+
+          <ul className="mt-8 space-y-3 text-sm">
+            <Feature icon={<Rocket className="h-4 w-4" />}>
+              Free during pilot — no credit card required
+            </Feature>
+            <Feature icon={<Users className="h-4 w-4" />}>
+              Unlimited students, classes, and subjects
+            </Feature>
+            <Feature icon={<BarChart3 className="h-4 w-4" />}>
+              Exam analytics, divisions, and printable report cards
+            </Feature>
+          </ul>
+        </div>
+
+        <p className="relative z-10 text-xs text-primary-foreground/60">
+          © {new Date().getFullYear()} SchoolsResultsPortal
+        </p>
+      </aside>
+
+      {/* Form panel */}
+      <main className="flex items-center justify-center px-5 py-10 sm:px-8">
+        <div className="w-full max-w-md">
+          <Link to="/" className="mb-8 inline-flex items-center gap-2 lg:hidden">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
+              <GraduationCap className="h-5 w-5" />
+            </span>
+            <span className="font-display font-semibold">SchoolsResultsPortal</span>
+          </Link>
+
+          <div className="mb-6">
+            <span className="inline-flex items-center rounded-full border border-border/60 bg-secondary px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-secondary-foreground">
+              {step === 1 ? "Step 1 of 2 · Account" : "Step 2 of 2 · School"}
+            </span>
+            <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight">
+              {step === 1 ? "Create your account" : "Tell us about your school"}
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {step === 1
+                ? "You'll be the first administrator of your school portal."
+                : "This becomes the public address parents will visit."}
+            </p>
+          </div>
+
+          <div className="mb-6 flex items-center gap-2 text-xs">
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full ${
               step >= 1 ? "bg-brand text-brand-foreground" : "bg-muted"
@@ -95,8 +171,8 @@ function SignupPage() {
           >
             1
           </span>
-          <span className="text-muted-foreground">Account</span>
-          <span className="mx-2 h-px flex-1 bg-border" />
+            <span className={step >= 1 ? "font-medium text-foreground" : "text-muted-foreground"}>Account</span>
+            <span className="mx-2 h-px flex-1 bg-border" />
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full ${
               step >= 2 ? "bg-brand text-brand-foreground" : "bg-muted"
@@ -104,19 +180,23 @@ function SignupPage() {
           >
             2
           </span>
-          <span className="text-muted-foreground">School</span>
-        </div>
+            <span className={step >= 2 ? "font-medium text-foreground" : "text-muted-foreground"}>School</span>
+          </div>
 
         {step === 1 ? (
           <>
-            <h1 className="font-display text-2xl font-semibold">Create your account</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              You will be the first administrator of your school portal.
-            </p>
-            <form onSubmit={handleAccount} className="mt-6 space-y-4">
+            <form onSubmit={handleAccount} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Your name</Label>
-                <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} />
+                <Input
+                  id="name"
+                  required
+                  autoFocus
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Jane Mwakasege"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -124,42 +204,73 @@ function SignupPage() {
                   id="email"
                   type="email"
                   required
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@school.com"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  minLength={6}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute inset-y-0 right-0 grid w-10 place-items-center text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                <p className="text-[11px] text-muted-foreground">Minimum 6 characters.</p>
               </div>
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-brand text-brand-foreground hover:bg-brand/90"
+                size="lg"
+                className="group w-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
-                {loading ? "Creating..." : "Continue"}
+                {loading ? (
+                  "Creating..."
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
               </Button>
             </form>
+
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link to="/login" className="font-medium text-foreground hover:underline">
+                Sign in
+              </Link>
+            </p>
           </>
         ) : (
           <>
-            <h1 className="font-display text-2xl font-semibold">Tell us about your school</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              This becomes your public results portal.
-            </p>
-            <form onSubmit={handleSchool} className="mt-6 space-y-4">
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-border/60 bg-secondary/60 px-3 py-2 text-xs text-secondary-foreground">
+              <CheckCircle2 className="h-3.5 w-3.5 text-brand" />
+              Account created for <span className="font-mono">{email}</span>
+            </div>
+            <form onSubmit={handleSchool} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="schoolName">School name</Label>
                 <Input
                   id="schoolName"
                   required
+                  autoFocus
                   value={schoolName}
                   onChange={(e) => setSchoolName(e.target.value)}
                   placeholder="e.g. Bonde Secondary School"
@@ -180,6 +291,9 @@ function SignupPage() {
                     className="border-0 focus-visible:ring-0"
                   />
                 </div>
+                <p className="text-[11px] text-muted-foreground">
+                  Lowercase letters, numbers, and dashes only.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="region">Region (optional)</Label>
@@ -190,17 +304,51 @@ function SignupPage() {
                   placeholder="e.g. Mbeya"
                 />
               </div>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-brand text-brand-foreground hover:bg-brand/90"
-              >
-                {loading ? "Creating school..." : "Create school portal"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setStep(1)}
+                  disabled={loading}
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  size="lg"
+                  className="group flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  {loading ? (
+                    "Creating school..."
+                  ) : (
+                    <>
+                      Create school portal
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </>
+                  )}
+                </Button>
+              </div>
             </form>
           </>
         )}
-      </div>
+
+          <p className="mt-8 text-center text-xs text-muted-foreground">
+            By continuing you agree to our terms and privacy policy.
+          </p>
+        </div>
+      </main>
     </div>
+  );
+}
+
+function Feature({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <li className="flex items-center gap-3 text-primary-foreground/85">
+      <span className="grid h-7 w-7 place-items-center rounded-md bg-white/10 text-brand">
+        {icon}
+      </span>
+      {children}
+    </li>
   );
 }
