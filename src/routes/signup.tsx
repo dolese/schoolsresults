@@ -30,6 +30,7 @@ function SignupPage() {
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [alreadySignedIn, setAlreadySignedIn] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +43,22 @@ function SignupPage() {
   useEffect(() => {
     setSlug(slugify(schoolName));
   }, [schoolName]);
+
+  // If the user is already authenticated (e.g. arrived from /app's
+  // "New school" button), skip the account-creation step entirely.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!active || !data.user) return;
+      setAlreadySignedIn(true);
+      setEmail(data.user.email ?? "");
+      setStep(2);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function handleAccount(e: React.FormEvent) {
     e.preventDefault();
@@ -151,18 +168,25 @@ function SignupPage() {
 
           <div className="mb-6">
             <span className="inline-flex items-center rounded-full border border-border/60 bg-secondary px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-secondary-foreground">
-              {step === 1 ? "Step 1 of 2 · Account" : "Step 2 of 2 · School"}
+              {alreadySignedIn
+                ? "Add a school"
+                : step === 1
+                  ? "Step 1 of 2 · Account"
+                  : "Step 2 of 2 · School"}
             </span>
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight">
-              {step === 1 ? "Create your account" : "Tell us about your school"}
+              {step === 1 && !alreadySignedIn
+                ? "Create your account"
+                : "Tell us about your school"}
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {step === 1
+              {step === 1 && !alreadySignedIn
                 ? "You'll be the first administrator of your school portal."
                 : "This becomes the public address parents will visit."}
             </p>
           </div>
 
+          {!alreadySignedIn && (
           <div className="mb-6 flex items-center gap-2 text-xs">
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full ${
@@ -182,6 +206,7 @@ function SignupPage() {
           </span>
             <span className={step >= 2 ? "font-medium text-foreground" : "text-muted-foreground"}>School</span>
           </div>
+          )}
 
         {step === 1 ? (
           <>
@@ -305,6 +330,7 @@ function SignupPage() {
                 />
               </div>
               <div className="flex items-center gap-2">
+                {!alreadySignedIn && (
                 <Button
                   type="button"
                   variant="outline"
@@ -313,6 +339,7 @@ function SignupPage() {
                 >
                   Back
                 </Button>
+                )}
                 <Button
                   type="submit"
                   disabled={loading}
