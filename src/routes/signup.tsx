@@ -186,6 +186,7 @@ function SignupPage() {
             </p>
           </div>
 
+          {!alreadySignedIn && (
           <div className="mb-6 flex items-center gap-2 text-xs">
           <span
             className={`flex h-6 w-6 items-center justify-center rounded-full ${
@@ -205,6 +206,7 @@ function SignupPage() {
           </span>
             <span className={step >= 2 ? "font-medium text-foreground" : "text-muted-foreground"}>School</span>
           </div>
+          )}
 
         {step === 1 ? (
           <>
@@ -328,6 +330,7 @@ function SignupPage() {
                 />
               </div>
               <div className="flex items-center gap-2">
+                {!alreadySignedIn && (
                 <Button
                   type="button"
                   variant="outline"
@@ -336,6 +339,7 @@ function SignupPage() {
                 >
                   Back
                 </Button>
+                )}
                 <Button
                   type="submit"
                   disabled={loading}
