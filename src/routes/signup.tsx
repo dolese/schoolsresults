@@ -168,13 +168,19 @@ function SignupPage() {
 
           <div className="mb-6">
             <span className="inline-flex items-center rounded-full border border-border/60 bg-secondary px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-secondary-foreground">
-              {step === 1 ? "Step 1 of 2 · Account" : "Step 2 of 2 · School"}
+              {alreadySignedIn
+                ? "Add a school"
+                : step === 1
+                  ? "Step 1 of 2 · Account"
+                  : "Step 2 of 2 · School"}
             </span>
             <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight">
-              {step === 1 ? "Create your account" : "Tell us about your school"}
+              {step === 1 && !alreadySignedIn
+                ? "Create your account"
+                : "Tell us about your school"}
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              {step === 1
+              {step === 1 && !alreadySignedIn
                 ? "You'll be the first administrator of your school portal."
                 : "This becomes the public address parents will visit."}
             </p>
