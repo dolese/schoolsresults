@@ -30,6 +30,7 @@ function SignupPage() {
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [alreadySignedIn, setAlreadySignedIn] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +43,22 @@ function SignupPage() {
   useEffect(() => {
     setSlug(slugify(schoolName));
   }, [schoolName]);
+
+  // If the user is already authenticated (e.g. arrived from /app's
+  // "New school" button), skip the account-creation step entirely.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!active || !data.user) return;
+      setAlreadySignedIn(true);
+      setEmail(data.user.email ?? "");
+      setStep(2);
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function handleAccount(e: React.FormEvent) {
     e.preventDefault();
