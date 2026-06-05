@@ -43,12 +43,12 @@ function LoginPage() {
       if (!active || !data.user) return;
       const redirectPath = normalizeInternalRedirect(search.redirect);
       if (redirectPath) {
-        navigate({ to: redirectPath as never, replace: true });
+        navigate({ href: redirectPath, replace: true } as never);
         return;
       }
       try {
         const mine = await fetchMySchools();
-        navigate({ to: getPostLoginPath(mine) as never, replace: true });
+        navigate({ href: getPostLoginPath(mine), replace: true } as never);
       } catch {
         navigate({ to: "/app", replace: true });
       }
@@ -73,13 +73,13 @@ function LoginPage() {
       const redirectPath = normalizeInternalRedirect(search.redirect);
       if (redirectPath) {
         toast.success("Welcome back!");
-        navigate({ to: redirectPath as never, replace: true });
+        navigate({ href: redirectPath, replace: true } as never);
         return;
       }
 
       const mySchools = await fetchMySchools();
       toast.success("Welcome back!");
-      navigate({ to: getPostLoginPath(mySchools) as never, replace: true });
+      navigate({ href: getPostLoginPath(mySchools), replace: true } as never);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not finish sign-in");
     } finally {
