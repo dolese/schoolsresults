@@ -230,7 +230,7 @@ function SuperAdminPage() {
               <ActivityRow
                 key={e.id}
                 title={e.name}
-                subtitle={e.schools?.name ?? "—"}
+                subtitle={e.school_name ?? "—"}
                 time={e.created_at}
                 badge={e.published ? "Published" : "Draft"}
               />
@@ -248,7 +248,7 @@ function SuperAdminPage() {
               <ActivityRow
                 key={a.id}
                 title={a.title}
-                subtitle={a.schools?.name ?? "—"}
+                subtitle={a.school_name ?? "—"}
                 time={a.created_at}
               />
             ))}
