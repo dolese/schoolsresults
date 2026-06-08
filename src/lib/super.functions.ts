@@ -101,3 +101,103 @@ export const setSchoolPlan = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const getSchoolDetail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ id: z.string().uuid() }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    await assertSuperAdmin(context.supabase, context.userId);
+
+    const { data: school, error: schoolErr } = await supabaseAdmin
+      .from("schools")
+      .select("id, slug, name, region, motto, plan, status, created_at, logo_url")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (schoolErr) throw new Error(schoolErr.message);
+    if (!school) throw new Error("School not found");
+
+    const [
+      { data: roles },
+      { count: students },
+      { count: exams },
+      { count: publishedExams },
+      { count: announcements },
+    ] = await Promise.all([
+      supabaseAdmin
+        .from("user_roles")
+        .select("user_id, role")
+        .eq("school_id", data.id),
+      supabaseAdmin
+        .from("students")
+        .select("id", { count: "exact", head: true })
+        .eq("school_id", data.id),
+      supabaseAdmin
+        .from("exams")
+        .select("id", { count: "exact", head: true })
+        .eq("school_id", data.id),
+      supabaseAdmin
+        .from("exams")
+        .select("id", { count: "exact", head: true })
+        .eq("school_id", data.id)
+        .eq("published", true),
+      supabaseAdmin
+        .from("announcements")
+        .select("id", { count: "exact", head: true })
+        .eq("school_id", data.id),
+    ]);
+
+    // Hydrate member emails via admin auth API
+    const members: { user_id: string; role: string; email: string | null }[] = [];
+    for (const r of roles ?? []) {
+      let email: string | null = null;
+      try {
+        const { data: u } = await supabaseAdmin.auth.admin.getUserById(r.user_id);
+        email = u?.user?.email ?? null;
+      } catch {
+        email = null;
+      }
+      members.push({ user_id: r.user_id, role: r.role, email });
+    }
+
+    return {
+      school,
+      stats: {
+        students: students ?? 0,
+        exams: exams ?? 0,
+        publishedExams: publishedExams ?? 0,
+        announcements: announcements ?? 0,
+      },
+      members,
+    };
+  });
+
+export const getRecentActivity = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertSuperAdmin(context.supabase, context.userId);
+    const [{ data: recentSchools }, { data: recentAnnouncements }, { data: recentExams }] =
+      await Promise.all([
+        supabaseAdmin
+          .from("schools")
+          .select("id, slug, name, created_at")
+          .order("created_at", { ascending: false })
+          .limit(5),
+        supabaseAdmin
+          .from("announcements")
+          .select("id, title, created_at, school_id, schools(name, slug)")
+          .order("created_at", { ascending: false })
+          .limit(5),
+        supabaseAdmin
+          .from("exams")
+          .select("id, name, created_at, published, school_id, schools(name, slug)")
+          .order("created_at", { ascending: false })
+          .limit(5),
+      ]);
+    return {
+      recentSchools: recentSchools ?? [],
+      recentAnnouncements: recentAnnouncements ?? [],
+      recentExams: recentExams ?? [],
+    };
+  });
