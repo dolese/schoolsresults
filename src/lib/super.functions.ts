@@ -177,27 +177,51 @@ export const getRecentActivity = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertSuperAdmin(context.supabase, context.userId);
-    const [{ data: recentSchools }, { data: recentAnnouncements }, { data: recentExams }] =
-      await Promise.all([
-        supabaseAdmin
-          .from("schools")
-          .select("id, slug, name, created_at")
-          .order("created_at", { ascending: false })
-          .limit(5),
-        supabaseAdmin
-          .from("announcements")
-          .select("id, title, created_at, school_id, schools(name, slug)")
-          .order("created_at", { ascending: false })
-          .limit(5),
-        supabaseAdmin
-          .from("exams")
-          .select("id, name, created_at, published, school_id, schools(name, slug)")
-          .order("created_at", { ascending: false })
-          .limit(5),
-      ]);
+    const [
+      { data: recentSchools },
+      { data: recentAnnouncementsRaw },
+      { data: recentExamsRaw },
+      { data: allSchools },
+    ] = await Promise.all([
+      supabaseAdmin
+        .from("schools")
+        .select("id, slug, name, created_at")
+        .order("created_at", { ascending: false })
+        .limit(5),
+      supabaseAdmin
+        .from("announcements")
+        .select("id, title, created_at, school_id")
+        .order("created_at", { ascending: false })
+        .limit(5),
+      supabaseAdmin
+        .from("exams")
+        .select("id, name, created_at, published, school_id")
+        .order("created_at", { ascending: false })
+        .limit(5),
+      supabaseAdmin.from("schools").select("id, name, slug"),
+    ]);
+
+    const schoolMap = new Map<string, { name: string; slug: string }>();
+    for (const s of allSchools ?? []) {
+      schoolMap.set(s.id, { name: s.name, slug: s.slug });
+    }
+
     return {
       recentSchools: recentSchools ?? [],
-      recentAnnouncements: recentAnnouncements ?? [],
-      recentExams: recentExams ?? [],
+      recentAnnouncements: (recentAnnouncementsRaw ?? []).map((a) => ({
+        id: a.id,
+        title: a.title,
+        created_at: a.created_at,
+        school_name: schoolMap.get(a.school_id)?.name ?? null,
+        school_slug: schoolMap.get(a.school_id)?.slug ?? null,
+      })),
+      recentExams: (recentExamsRaw ?? []).map((e) => ({
+        id: e.id,
+        name: e.name,
+        created_at: e.created_at,
+        published: e.published,
+        school_name: schoolMap.get(e.school_id)?.name ?? null,
+        school_slug: schoolMap.get(e.school_id)?.slug ?? null,
+      })),
     };
   });
