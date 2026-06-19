@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Megaphone } from "lucide-react";
+import { Megaphone } from "lucide-react";
 import { getPublicAnnouncements } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
+import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
 
 export const Route = createFileRoute("/$schoolSlug/announcements")({
   loader: async ({ params }) => {
@@ -17,8 +18,24 @@ export const Route = createFileRoute("/$schoolSlug/announcements")({
             name: "description",
             content: `Latest announcements from ${loaderData.school.name}.`,
           },
+          {
+            property: "og:title",
+            content: `Announcements — ${loaderData.school.name}`,
+          },
+          {
+            property: "og:url",
+            content: `https://schoolsresults.lovable.app/${loaderData.school.slug}/announcements`,
+          },
         ]
       : [{ title: "School not found" }],
+    links: loaderData
+      ? [
+          {
+            rel: "canonical",
+            href: `https://schoolsresults.lovable.app/${loaderData.school.slug}/announcements`,
+          },
+        ]
+      : [],
   }),
   component: AnnouncementsPage,
   notFoundComponent: () => (
@@ -37,26 +54,18 @@ function AnnouncementsPage() {
   const { school, announcements } = Route.useLoaderData();
   return (
     <div className="min-h-screen bg-background">
+      <PublicSchoolNav school={school} />
       <div className="mx-auto max-w-3xl px-4 py-10">
-        <Button asChild variant="ghost" size="sm" className="mb-4">
-          <Link to="/$schoolSlug" params={{ schoolSlug: school.slug }}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to {school.name}
-          </Link>
-        </Button>
-        <div className="mb-8 flex items-center gap-3">
-          {school.logo_url && (
-            <img
-              src={school.logo_url}
-              alt=""
-              className="h-12 w-12 rounded-full object-cover"
-            />
-          )}
-          <div>
-            <h1 className="font-display text-3xl font-semibold tracking-tight">
-              Announcements
-            </h1>
-            <p className="text-sm text-muted-foreground">{school.name}</p>
-          </div>
+        <div className="mb-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+            <Megaphone className="h-3.5 w-3.5 text-brand" /> School updates
+          </span>
+          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">
+            Announcements
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Notices and updates from {school.name}.
+          </p>
         </div>
 
         {announcements.length === 0 ? (
