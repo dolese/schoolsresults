@@ -14,6 +14,7 @@ import {
 import { getSchoolBySlug, searchPublicResults } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
 import {
   Select,
   SelectContent,
@@ -34,8 +35,25 @@ export const Route = createFileRoute("/$schoolSlug/")({
           { title: `${loaderData.school.name} - Results Portal` },
           { name: "description", content: `Check exam results for ${loaderData.school.name}.` },
           { property: "og:title", content: `${loaderData.school.name} - Results Portal` },
+          {
+            property: "og:description",
+            content: `Search published exam results, announcements, and top performers for ${loaderData.school.name}.`,
+          },
+          {
+            property: "og:url",
+            content: `https://schoolsresults.lovable.app/${loaderData.school.slug}`,
+          },
+          { property: "og:type", content: "website" },
         ]
       : [{ title: "School not found" }],
+    links: loaderData
+      ? [
+          {
+            rel: "canonical",
+            href: `https://schoolsresults.lovable.app/${loaderData.school.slug}`,
+          },
+        ]
+      : [],
   }),
   component: PublicSchoolPage,
   notFoundComponent: () => (
@@ -95,34 +113,7 @@ function PublicSchoolPage() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.97_0.01_245))]">
-      <header className="border-b border-border/60 bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
-          <div className="flex items-center gap-3">
-            {school.logo_url ? (
-              <img
-                src={school.logo_url}
-                alt={`${school.name} logo`}
-                className="h-12 w-12 rounded-2xl object-cover ring-1 ring-border"
-              />
-            ) : (
-              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground">
-                <GraduationCap className="h-6 w-6" />
-              </span>
-            )}
-            <div>
-              <div className="font-display text-lg font-semibold leading-tight">{school.name}</div>
-              <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
-                Official results portal
-              </div>
-            </div>
-          </div>
-          <Button asChild variant="outline" size="sm">
-            <Link to="/login" search={{ redirect: `/manage/${school.slug}` } as never}>
-              Staff sign in
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <PublicSchoolNav school={school} />
 
       <main>
         <section className="relative overflow-hidden">
