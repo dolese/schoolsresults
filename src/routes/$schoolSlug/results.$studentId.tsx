@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, Printer, LineChart } from "lucide-react";
+import { Printer, LineChart, Info } from "lucide-react";
 import { getPublicStudentResult } from "@/lib/schools.functions";
 import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
+import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
 
 export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -23,7 +24,32 @@ export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
     }
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData ? `${loaderData.student.full_name} - Results` : "Result not found" }],
+    meta: loaderData
+      ? [
+          { title: `${loaderData.student.full_name} — Results` },
+          {
+            name: "description",
+            content: `Published exam results for ${loaderData.student.full_name} at ${loaderData.school.name}.`,
+          },
+          {
+            property: "og:title",
+            content: `${loaderData.student.full_name} — Results`,
+          },
+          {
+            property: "og:url",
+            content: `https://schoolsresults.lovable.app/${loaderData.school.slug}/results/${loaderData.student.id}`,
+          },
+          { name: "robots", content: "noindex" },
+        ]
+      : [{ title: "Result not found" }],
+    links: loaderData
+      ? [
+          {
+            rel: "canonical",
+            href: `https://schoolsresults.lovable.app/${loaderData.school.slug}/results/${loaderData.student.id}`,
+          },
+        ]
+      : [],
   }),
   component: ResultPage,
   notFoundComponent: () => (
@@ -49,13 +75,11 @@ function ResultPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <div className="no-print">
+        <PublicSchoolNav school={school} />
+      </div>
       <div className="mx-auto max-w-3xl px-4 py-10">
-        <Button asChild variant="ghost" size="sm" className="mb-4">
-          <Link to="/$schoolSlug" params={{ schoolSlug: school.slug }}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-          </Link>
-        </Button>
-        <div className="mb-3 flex justify-end no-print">
+        <div className="mb-3 flex flex-wrap justify-end gap-2 no-print">
           <div className="flex gap-2">
             <Button asChild size="sm" variant="outline">
               <Link
@@ -132,7 +156,9 @@ function ResultPage() {
                           <td className="py-2.5">{mark.subject}</td>
                           <td className="py-2.5 text-right font-medium">{mark.score.toFixed(0)}</td>
                           <td className="py-2.5 text-right">
-                            <span className="rounded-md bg-secondary px-2 py-0.5 font-semibold">
+                            <span
+                              className={`inline-block min-w-7 rounded-md px-2 py-0.5 text-center font-semibold ${gradeBadge(grade.grade)}`}
+                            >
                               {grade.grade}
                             </span>
                           </td>
@@ -165,10 +191,54 @@ function ResultPage() {
                   </div>
                 </div>
               </div>
+
+              <div className="mt-6 rounded-xl border border-border/60 bg-background p-4 text-xs text-muted-foreground no-print">
+                <div className="mb-2 flex items-center gap-2 font-medium text-foreground">
+                  <Info className="h-3.5 w-3.5 text-brand" /> NECTA grading
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    ["A", "75–100"],
+                    ["B", "65–74"],
+                    ["C", "45–64"],
+                    ["D", "30–44"],
+                    ["F", "0–29"],
+                  ].map(([g, r]) => (
+                    <span
+                      key={g}
+                      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 ${gradeBadge(g)}`}
+                    >
+                      <span className="font-semibold">{g}</span>
+                      <span className="opacity-80">{r}</span>
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-2">
+                  Division is computed from the best 7 subjects (lower points = better
+                  division).
+                </p>
+              </div>
             </>
           )}
         </div>
       </div>
     </div>
   );
+}
+
+function gradeBadge(g: string) {
+  switch (g) {
+    case "A":
+      return "bg-success/15 text-success";
+    case "B":
+      return "bg-brand/15 text-brand";
+    case "C":
+      return "bg-amber-500/15 text-amber-700 dark:text-amber-400";
+    case "D":
+      return "bg-orange-500/15 text-orange-700 dark:text-orange-400";
+    case "F":
+      return "bg-destructive/15 text-destructive";
+    default:
+      return "bg-secondary text-foreground";
+  }
 }
