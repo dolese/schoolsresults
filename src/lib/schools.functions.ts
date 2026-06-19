@@ -256,7 +256,7 @@ export const getPublicStudentResult = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { data: school } = await supabaseAdmin
       .from("schools")
-      .select("id, name, logo_url, motto")
+      .select("id, slug, name, logo_url, motto")
       .eq("slug", data.slug)
       .eq("status", "active")
       .maybeSingle();
