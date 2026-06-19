@@ -5,7 +5,6 @@ import { useMutation } from "@tanstack/react-query";
 import {
   ArrowRight,
   BookOpenCheck,
-  GraduationCap,
   Megaphone,
   Search,
   ShieldCheck,
