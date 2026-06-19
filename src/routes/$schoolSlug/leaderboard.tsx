@@ -2,10 +2,11 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ArrowLeft, Crown, Medal, Trophy } from "lucide-react";
+import { Crown, Medal, Trophy } from "lucide-react";
 import { z } from "zod";
 import { getPublicLeaderboard } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
+import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
 import {
   Select,
   SelectContent,
@@ -47,8 +48,24 @@ export const Route = createFileRoute("/$schoolSlug/leaderboard")({
             name: "description",
             content: `Top performing students at ${loaderData.school.name}.`,
           },
+          {
+            property: "og:title",
+            content: `Top performers — ${loaderData.school.name}`,
+          },
+          {
+            property: "og:url",
+            content: `https://schoolsresults.lovable.app/${loaderData.school.slug}/leaderboard`,
+          },
         ]
       : [{ title: "School not found" }],
+    links: loaderData
+      ? [
+          {
+            rel: "canonical",
+            href: `https://schoolsresults.lovable.app/${loaderData.school.slug}/leaderboard`,
+          },
+        ]
+      : [],
   }),
   component: LeaderboardPage,
 });
@@ -71,15 +88,7 @@ function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.97_0.01_245))]">
-      <header className="border-b border-border/60 bg-background/85 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/$schoolSlug" params={{ schoolSlug }}>
-              <ArrowLeft className="mr-2 h-4 w-4" /> {data.school.name}
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <PublicSchoolNav school={data.school} />
 
       <main className="mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
