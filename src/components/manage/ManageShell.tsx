@@ -83,11 +83,7 @@ export function ManageShell({
     },
     {
       label: "Assessment",
-      items: [
-        { to: `${base}/exams`, label: "Exams & Marks", icon: ClipboardList },
-        { to: `${base}/exams`, label: "Analytics", icon: BarChart3 },
-        { to: `${base}/students`, label: "Bulk import", icon: Upload },
-      ],
+      items: [{ to: `${base}/exams`, label: "Exams & Marks", icon: ClipboardList }],
     },
     {
       label: "Community",
