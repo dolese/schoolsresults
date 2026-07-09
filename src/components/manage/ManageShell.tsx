@@ -9,11 +9,9 @@ import {
   GraduationCap,
   BookOpen,
   Settings,
-  BarChart3,
-  FileText,
   Trophy,
   Home,
-  Upload,
+  Newspaper,
   ChevronsUpDown,
   ArrowLeftRight,
 } from "lucide-react";
