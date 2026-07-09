@@ -34,6 +34,7 @@ import {
   SidebarMenuSubItem,
   SidebarProvider,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 export function ManageShell({
@@ -45,7 +46,29 @@ export function ManageShell({
   schoolName: string;
   children: React.ReactNode;
 }) {
+  return (
+    <SidebarProvider>
+      <ManageShellInner schoolSlug={schoolSlug} schoolName={schoolName}>
+        {children}
+      </ManageShellInner>
+    </SidebarProvider>
+  );
+}
+
+function ManageShellInner({
+  schoolSlug,
+  schoolName,
+  children,
+}: {
+  schoolSlug: string;
+  schoolName: string;
+  children: React.ReactNode;
+}) {
   const navigate = useNavigate();
+  const { isMobile, setOpenMobile } = useSidebar();
+  const closeMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
   const path = useRouterState({ select: (s) => s.location.pathname });
   const base = `/manage/${schoolSlug}`;
 
@@ -53,6 +76,7 @@ export function ManageShell({
     exact ? path === to : path === to || path.startsWith(to + "/") || path.startsWith(to + "?");
 
   async function logout() {
+    closeMobile();
     await supabase.auth.signOut();
     navigate({ to: "/" });
   }
@@ -102,8 +126,7 @@ export function ManageShell({
   ];
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
+    <>
         <Sidebar collapsible="icon">
           <SidebarHeader className="border-b border-border/60">
             <div className="flex items-center gap-2 px-2 py-2">
@@ -117,7 +140,7 @@ export function ManageShell({
             </div>
           </SidebarHeader>
 
-          <SidebarContent>
+          <SidebarContent className="overscroll-contain">
             {groups.map((group) => (
               <SidebarGroup key={group.label}>
                 <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
@@ -129,7 +152,12 @@ export function ManageShell({
                         return (
                           <SidebarMenuItem key={it.to}>
                             <SidebarMenuButton asChild tooltip={it.label}>
-                              <a href={it.to} target="_blank" rel="noreferrer">
+                              <a
+                                href={it.to}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={closeMobile}
+                              >
                                 <it.icon className="h-4 w-4" />
                                 <span>{it.label}</span>
                                 <ExternalLink className="ml-auto h-3 w-3 opacity-60" />
@@ -141,7 +169,7 @@ export function ManageShell({
                       return (
                         <SidebarMenuItem key={it.to}>
                           <SidebarMenuButton asChild isActive={active} tooltip={it.label}>
-                            <Link to={it.to}>
+                            <Link to={it.to} onClick={closeMobile}>
                               <it.icon className="h-4 w-4" />
                               <span>{it.label}</span>
                             </Link>
@@ -151,7 +179,9 @@ export function ManageShell({
                               {it.sub.map((s) => (
                                 <SidebarMenuSubItem key={s.to + s.label}>
                                   <SidebarMenuSubButton asChild>
-                                    <Link to={s.to}>{s.label}</Link>
+                                    <Link to={s.to} onClick={closeMobile}>
+                                      {s.label}
+                                    </Link>
                                   </SidebarMenuSubButton>
                                 </SidebarMenuSubItem>
                               ))}
@@ -170,7 +200,7 @@ export function ManageShell({
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Switch school">
-                  <Link to="/app">
+                  <Link to="/app" onClick={closeMobile}>
                     <ArrowLeftRight className="h-4 w-4" />
                     <span>Switch school</span>
                   </Link>
@@ -187,27 +217,26 @@ export function ManageShell({
         </Sidebar>
 
         <SidebarInset className="min-w-0">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur">
+          <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border/60 bg-background/90 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
             <SidebarTrigger />
-            <div className="flex min-w-0 items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
               <ChevronsUpDown className="h-3 w-3 text-muted-foreground" />
-              <span className="truncate text-sm font-medium">{schoolName}</span>
+              <span className="min-w-0 truncate text-sm font-medium">{schoolName}</span>
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 · staff dashboard
               </span>
             </div>
-            <div className="ml-auto flex items-center gap-2">
-              <Button asChild variant="outline" size="sm">
+            <div className="ml-auto flex shrink-0 items-center gap-2">
+              <Button asChild variant="outline" size="sm" className="h-8 px-2 sm:px-3">
                 <a href={`/${schoolSlug}`} target="_blank" rel="noreferrer">
-                  <ExternalLink className="mr-2 h-3.5 w-3.5" />
-                  Public portal
+                  <ExternalLink className="h-3.5 w-3.5 sm:mr-2" />
+                  <span className="hidden sm:inline">Public portal</span>
                 </a>
               </Button>
             </div>
           </header>
           <div className="min-w-0">{children}</div>
         </SidebarInset>
-      </div>
-    </SidebarProvider>
+    </>
   );
 }
