@@ -92,7 +92,7 @@ export function ManageShell({
       items: [
         { to: `/${schoolSlug}`, label: "School home", icon: Home, external: true },
         { to: `/${schoolSlug}/leaderboard`, label: "Leaderboard", icon: Trophy, external: true },
-        { to: `/${schoolSlug}/announcements`, label: "News feed", icon: FileText, external: true },
+        { to: `/${schoolSlug}/announcements`, label: "News feed", icon: Newspaper, external: true },
       ],
     },
     {
