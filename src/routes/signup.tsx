@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/signup")({
+  ssr: false,
   head: () => ({ meta: [{ title: "Start your school - SchoolsResultsPortal" }] }),
   component: SignupPage,
 });
