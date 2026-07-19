@@ -14,13 +14,15 @@ export function SiteHeader() {
             SchoolsResultsPortal
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
-          <Link to="/" activeProps={{ className: "text-foreground" }}>Home</Link>
-          <Link to="/pricing" activeProps={{ className: "text-foreground" }}>Pricing</Link>
+        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
+          <a href="/#features" className="hover:text-foreground">Features</a>
+          <a href="/#how" className="hover:text-foreground">How it works</a>
+          <a href="/#pricing" className="hover:text-foreground">Pricing</a>
+          <a href="/#security" className="hover:text-foreground">Security</a>
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm"><Link to="/login">Log in</Link></Button>
-          <Button asChild size="sm" className="bg-brand text-brand-foreground hover:bg-brand/90"><Link to="/signup">Start your school</Link></Button>
+          <Button asChild variant="ghost" size="sm"><Link to="/login">Sign in</Link></Button>
+          <Button asChild size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90"><Link to="/signup">Get started</Link></Button>
         </div>
       </div>
     </header>
