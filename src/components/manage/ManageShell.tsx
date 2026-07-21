@@ -135,26 +135,115 @@ function ManageShellInner({
       exact?: boolean;
       sub?: { to: string; label: string }[];
       external?: boolean;
+      soon?: boolean;
     }[];
   }[] = [
     {
-      label: "Workspace",
+      label: "Dashboard",
       items: [
         { to: base, label: "Overview", icon: LayoutDashboard, exact: true },
-        { to: `${base}/academics`, label: "Academics", icon: BookOpen },
+        { to: `${base}/analytics`, label: "Analytics", icon: BarChart3, soon: true },
+        { to: `${base}/activity`, label: "Recent activity", icon: Activity, soon: true },
+        { to: `${base}/notifications`, label: "Notifications", icon: Bell, soon: true },
       ],
     },
     {
-      label: "People",
-      items: [{ to: `${base}/students`, label: "Students", icon: Users }],
+      label: "Academic",
+      items: [
+        { to: `${base}/academics`, label: "Subjects & forms", icon: BookOpen },
+        { to: `${base}/exams`, label: "Examinations", icon: ClipboardList },
+        { to: `${base}/results`, label: "Results", icon: Award, soon: true },
+        { to: `${base}/classes`, label: "Classes & streams", icon: Layers, soon: true },
+        { to: `${base}/years`, label: "Academic years", icon: CalendarRange, soon: true },
+        { to: `${base}/terms`, label: "Terms", icon: CalendarDays, soon: true },
+        { to: `${base}/grading`, label: "Grading system", icon: Sparkles, soon: true },
+        { to: `${base}/rankings`, label: "Rankings", icon: ListOrdered, soon: true },
+        { to: `${base}/merit-list`, label: "Merit list", icon: Medal, soon: true },
+      ],
+    },
+    {
+      label: "Students",
+      items: [
+        { to: `${base}/students`, label: "Student list", icon: Users },
+        { to: `${base}/students/profiles`, label: "Profiles", icon: UserCircle2, soon: true },
+        { to: `${base}/students/admission`, label: "Admission", icon: UserPlus, soon: true },
+        { to: `${base}/students/promotion`, label: "Promotion", icon: ArrowUpRight, soon: true },
+        { to: `${base}/students/alumni`, label: "Alumni", icon: Users2, soon: true },
+      ],
+    },
+    {
+      label: "Staff",
+      items: [
+        { to: `${base}/staff/teachers`, label: "Teachers", icon: Presentation, soon: true },
+        { to: `${base}/staff/class-teachers`, label: "Class teachers", icon: UserCheck, soon: true },
+        { to: `${base}/staff/subject-teachers`, label: "Subject teachers", icon: BookOpen, soon: true },
+        { to: `${base}/staff/departments`, label: "Departments", icon: Building2, soon: true },
+      ],
     },
     {
       label: "Assessment",
-      items: [{ to: `${base}/exams`, label: "Exams & Marks", icon: ClipboardList }],
+      items: [
+        { to: `${base}/exams`, label: "Marks entry", icon: ClipboardCheck },
+        { to: `${base}/assessment/import`, label: "Bulk import marks", icon: FileSpreadsheet, soon: true },
+        { to: `${base}/assessment/verify`, label: "Verify results", icon: CheckCircle2, soon: true },
+        { to: `${base}/assessment/publish`, label: "Publish results", icon: Send, soon: true },
+        { to: `${base}/assessment/history`, label: "Result history", icon: History, soon: true },
+        { to: `${base}/assessment/locks`, label: "Lock / unlock", icon: Lock, soon: true },
+      ],
+    },
+    {
+      label: "Reports",
+      items: [
+        { to: `${base}/reports/report-cards`, label: "Report cards", icon: FileBarChart, soon: true },
+        { to: `${base}/reports/class`, label: "Class performance", icon: BarChart3, soon: true },
+        { to: `${base}/reports/subject`, label: "Subject analysis", icon: PieChart, soon: true },
+        { to: `${base}/reports/gender`, label: "Gender analysis", icon: LineChart, soon: true },
+        { to: `${base}/reports/teacher`, label: "Teacher performance", icon: UserCheck, soon: true },
+        { to: `${base}/reports/school`, label: "School performance", icon: School, soon: true },
+        { to: `${base}/reports/necta`, label: "NECTA analysis", icon: Trophy, soon: true },
+        { to: `${base}/reports/custom`, label: "Custom reports", icon: SlidersHorizontal, soon: true },
+      ],
+    },
+    {
+      label: "Documents",
+      items: [
+        { to: `${base}/docs/certificates`, label: "Certificates", icon: ScrollText, soon: true },
+        { to: `${base}/docs/testimonials`, label: "Testimonials", icon: FileText, soon: true },
+        { to: `${base}/docs/templates`, label: "Report templates", icon: Files, soon: true },
+        { to: `${base}/docs/print`, label: "Print center", icon: Printer, soon: true },
+      ],
     },
     {
       label: "Community",
-      items: [{ to: `${base}/announcements`, label: "Announcements", icon: Megaphone }],
+      items: [
+        { to: `${base}/announcements`, label: "Announcements", icon: Megaphone },
+        { to: `${base}/community/sms`, label: "SMS", icon: MessageSquare, soon: true },
+        { to: `${base}/community/email`, label: "Email", icon: Mail, soon: true },
+        { to: `${base}/community/notifications`, label: "Notifications", icon: Bell, soon: true },
+      ],
+    },
+    {
+      label: "School management",
+      items: [
+        { to: `${base}/calendar`, label: "Academic calendar", icon: CalendarDays, soon: true },
+        { to: `${base}/timetable`, label: "Timetable", icon: Clock, soon: true },
+        { to: `${base}/attendance`, label: "Attendance", icon: ClipboardCheck, soon: true },
+      ],
+    },
+    {
+      label: "Finance",
+      items: [
+        { to: `${base}/finance/fees`, label: "Fee status", icon: Wallet, soon: true },
+        { to: `${base}/finance/payments`, label: "Payment history", icon: Receipt, soon: true },
+      ],
+    },
+    {
+      label: "Search",
+      items: [
+        { to: `${base}/search/student`, label: "Find student", icon: Search, soon: true },
+        { to: `${base}/search/results`, label: "Find results", icon: Search, soon: true },
+        { to: `${base}/search/advanced`, label: "Advanced search", icon: Search, soon: true },
+      ],
     },
     {
       label: "Public portal",
@@ -165,8 +254,26 @@ function ManageShellInner({
       ],
     },
     {
-      label: "Configuration",
-      items: [{ to: `${base}/settings`, label: "Settings", icon: Settings }],
+      label: "Administration",
+      items: [
+        { to: `${base}/settings`, label: "Settings", icon: Settings },
+        { to: `${base}/admin/users`, label: "Users", icon: Users, soon: true },
+        { to: `${base}/admin/roles`, label: "Roles & permissions", icon: ShieldCheck, soon: true },
+        { to: `${base}/admin/branches`, label: "Branches / campuses", icon: Building2, soon: true },
+        { to: `${base}/admin/audit`, label: "Audit logs", icon: History, soon: true },
+        { to: `${base}/admin/api-keys`, label: "API keys", icon: KeyRound, soon: true },
+        { to: `${base}/admin/integrations`, label: "Integrations", icon: Plug, soon: true },
+        { to: `${base}/admin/backup`, label: "Backup & restore", icon: DatabaseBackup, soon: true },
+      ],
+    },
+    {
+      label: "Account",
+      items: [
+        { to: `${base}/account/profile`, label: "My profile", icon: UserCircle2, soon: true },
+        { to: `${base}/account/password`, label: "Change password", icon: KeySquare, soon: true },
+        { to: `${base}/account/theme`, label: "Theme", icon: Palette, soon: true },
+        { to: `${base}/account/help`, label: "Help & support", icon: LifeBuoy, soon: true },
+      ],
     },
   ];
 
