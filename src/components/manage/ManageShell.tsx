@@ -318,6 +318,23 @@ function ManageShellInner({
                           </SidebarMenuItem>
                         );
                       }
+                      if (it.soon) {
+                        return (
+                          <SidebarMenuItem key={it.to}>
+                            <SidebarMenuButton
+                              tooltip={`${it.label} — coming soon`}
+                              disabled
+                              className="cursor-not-allowed opacity-60"
+                            >
+                              <it.icon className="h-4 w-4" />
+                              <span>{it.label}</span>
+                              <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground group-data-[collapsible=icon]:hidden">
+                                Soon
+                              </span>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      }
                       return (
                         <SidebarMenuItem key={it.to}>
                           <SidebarMenuButton asChild isActive={active} tooltip={it.label}>
