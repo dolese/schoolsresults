@@ -94,7 +94,7 @@ function ShellInner({
 
   return (
     <>
-      <Sidebar collapsible="icon">
+      <Sidebar collapsible="icon" className="no-print">
         <SidebarHeader className="border-b border-border/60">
           <Link
             to="/$schoolSlug"
@@ -194,7 +194,7 @@ function ShellInner({
       </Sidebar>
 
       <SidebarInset className="min-w-0">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/90 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+        <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/90 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/70">
           <SidebarTrigger />
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <ChevronsUpDown className="h-3 w-3 text-muted-foreground" />
