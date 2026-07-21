@@ -3,7 +3,7 @@ import { Printer, LineChart, Info } from "lucide-react";
 import { getPublicStudentResult } from "@/lib/schools.functions";
 import { gradeFor, computeDivision } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
-import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
+import { PublicSchoolShell } from "@/components/site/PublicSchoolShell";
 
 export const Route = createFileRoute("/$schoolSlug/results/$studentId")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -74,10 +74,7 @@ function ResultPage() {
   const avg = scores.length ? total / scores.length : 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="no-print">
-        <PublicSchoolNav school={school} />
-      </div>
+    <PublicSchoolShell school={school}>
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-3 flex flex-wrap justify-end gap-2 no-print">
           <div className="flex gap-2">
@@ -222,7 +219,7 @@ function ResultPage() {
           )}
         </div>
       </div>
-    </div>
+    </PublicSchoolShell>
   );
 }
 

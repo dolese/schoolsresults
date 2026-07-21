@@ -13,7 +13,7 @@ import {
 import { getSchoolBySlug, searchPublicResults } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
+import { PublicSchoolShell } from "@/components/site/PublicSchoolShell";
 import {
   Select,
   SelectContent,
@@ -111,10 +111,8 @@ function PublicSchoolPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.97_0.01_245))]">
-      <PublicSchoolNav school={school} />
-
-      <main>
+    <PublicSchoolShell school={school}>
+      <main className="bg-[linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.97_0.01_245))]">
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,oklch(0.74_0.17_60/0.22),transparent_30%),radial-gradient(circle_at_top_right,oklch(0.32_0.13_260/0.18),transparent_36%)]" />
           <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1.15fr_0.85fr] md:py-24">
@@ -404,6 +402,6 @@ function PublicSchoolPage() {
           </Link>
         </section>
       </main>
-    </div>
+    </PublicSchoolShell>
   );
 }

@@ -6,7 +6,7 @@ import { Crown, Medal, Trophy } from "lucide-react";
 import { z } from "zod";
 import { getPublicLeaderboard } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
-import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
+import { PublicSchoolShell } from "@/components/site/PublicSchoolShell";
 import {
   Select,
   SelectContent,
@@ -87,9 +87,7 @@ function LeaderboardPage() {
   const medalColors = ["text-amber-500", "text-slate-400", "text-orange-600"];
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.97_0.01_245))]">
-      <PublicSchoolNav school={data.school} />
-
+    <PublicSchoolShell school={data.school}>
       <main className="mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
@@ -231,6 +229,6 @@ function LeaderboardPage() {
           </>
         )}
       </main>
-    </div>
+    </PublicSchoolShell>
   );
 }

@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Megaphone } from "lucide-react";
 import { getPublicAnnouncements } from "@/lib/schools.functions";
 import { Button } from "@/components/ui/button";
-import { PublicSchoolNav } from "@/components/site/PublicSchoolNav";
+import { PublicSchoolShell } from "@/components/site/PublicSchoolShell";
 
 export const Route = createFileRoute("/$schoolSlug/announcements")({
   loader: async ({ params }) => {
@@ -53,8 +53,7 @@ export const Route = createFileRoute("/$schoolSlug/announcements")({
 function AnnouncementsPage() {
   const { school, announcements } = Route.useLoaderData();
   return (
-    <div className="min-h-screen bg-background">
-      <PublicSchoolNav school={school} />
+    <PublicSchoolShell school={school}>
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
@@ -96,6 +95,6 @@ function AnnouncementsPage() {
           </ol>
         )}
       </div>
-    </div>
+    </PublicSchoolShell>
   );
 }

@@ -3,6 +3,7 @@ import { ArrowLeft, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { getPublicStudentHistory } from "@/lib/schools.functions";
 import { computeDivision, gradeFor } from "@/lib/grading";
 import { Button } from "@/components/ui/button";
+import { PublicSchoolShell } from "@/components/site/PublicSchoolShell";
 
 export const Route = createFileRoute("/$schoolSlug/students/$studentId/history")({
   loader: async ({ params }) => {
@@ -67,7 +68,7 @@ function HistoryPage() {
   const maxAvg = Math.max(100, ...rows.map((r) => r.avg));
 
   return (
-    <div className="min-h-screen bg-background">
+    <PublicSchoolShell school={school}>
       <div className="mx-auto max-w-4xl px-4 py-10">
         <Button asChild variant="ghost" size="sm" className="mb-4">
           <Link
@@ -220,7 +221,7 @@ function HistoryPage() {
           </>
         )}
       </div>
-    </div>
+    </PublicSchoolShell>
   );
 }
 
