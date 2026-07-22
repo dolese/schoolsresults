@@ -35,6 +35,7 @@ import { Route as AuthenticatedManageSchoolSlugClassesRouteImport } from './rout
 import { Route as AuthenticatedManageSchoolSlugCalendarRouteImport } from './routes/_authenticated/manage.$schoolSlug.calendar'
 import { Route as AuthenticatedManageSchoolSlugAttendanceRouteImport } from './routes/_authenticated/manage.$schoolSlug.attendance'
 import { Route as AuthenticatedManageSchoolSlugAnnouncementsRouteImport } from './routes/_authenticated/manage.$schoolSlug.announcements'
+import { Route as AuthenticatedManageSchoolSlugAnalyticsRouteImport } from './routes/_authenticated/manage.$schoolSlug.analytics'
 import { Route as AuthenticatedManageSchoolSlugActivityRouteImport } from './routes/_authenticated/manage.$schoolSlug.activity'
 import { Route as AuthenticatedManageSchoolSlugAcademicsRouteImport } from './routes/_authenticated/manage.$schoolSlug.academics'
 import { Route as SchoolSlugStudentsStudentIdHistoryRouteImport } from './routes/$schoolSlug/students.$studentId.history'
@@ -224,6 +225,12 @@ const AuthenticatedManageSchoolSlugAnnouncementsRoute =
   AuthenticatedManageSchoolSlugAnnouncementsRouteImport.update({
     id: '/announcements',
     path: '/announcements',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugAnalyticsRoute =
+  AuthenticatedManageSchoolSlugAnalyticsRouteImport.update({
+    id: '/analytics',
+    path: '/analytics',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugActivityRoute =
@@ -512,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
+  '/manage/$schoolSlug/analytics': typeof AuthenticatedManageSchoolSlugAnalyticsRoute
   '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/attendance': typeof AuthenticatedManageSchoolSlugAttendanceRoute
   '/manage/$schoolSlug/calendar': typeof AuthenticatedManageSchoolSlugCalendarRoute
@@ -583,6 +591,7 @@ export interface FileRoutesByTo {
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
+  '/manage/$schoolSlug/analytics': typeof AuthenticatedManageSchoolSlugAnalyticsRoute
   '/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/manage/$schoolSlug/attendance': typeof AuthenticatedManageSchoolSlugAttendanceRoute
   '/manage/$schoolSlug/calendar': typeof AuthenticatedManageSchoolSlugCalendarRoute
@@ -657,6 +666,7 @@ export interface FileRoutesById {
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/_authenticated/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/_authenticated/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
+  '/_authenticated/manage/$schoolSlug/analytics': typeof AuthenticatedManageSchoolSlugAnalyticsRoute
   '/_authenticated/manage/$schoolSlug/announcements': typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   '/_authenticated/manage/$schoolSlug/attendance': typeof AuthenticatedManageSchoolSlugAttendanceRoute
   '/_authenticated/manage/$schoolSlug/calendar': typeof AuthenticatedManageSchoolSlugCalendarRoute
@@ -731,6 +741,7 @@ export interface FileRouteTypes {
     | '/$schoolSlug/students/$studentId/history'
     | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/activity'
+    | '/manage/$schoolSlug/analytics'
     | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/attendance'
     | '/manage/$schoolSlug/calendar'
@@ -802,6 +813,7 @@ export interface FileRouteTypes {
     | '/$schoolSlug/students/$studentId/history'
     | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/activity'
+    | '/manage/$schoolSlug/analytics'
     | '/manage/$schoolSlug/announcements'
     | '/manage/$schoolSlug/attendance'
     | '/manage/$schoolSlug/calendar'
@@ -875,6 +887,7 @@ export interface FileRouteTypes {
     | '/$schoolSlug/students/$studentId/history'
     | '/_authenticated/manage/$schoolSlug/academics'
     | '/_authenticated/manage/$schoolSlug/activity'
+    | '/_authenticated/manage/$schoolSlug/analytics'
     | '/_authenticated/manage/$schoolSlug/announcements'
     | '/_authenticated/manage/$schoolSlug/attendance'
     | '/_authenticated/manage/$schoolSlug/calendar'
@@ -1128,6 +1141,13 @@ declare module '@tanstack/react-router' {
       path: '/announcements'
       fullPath: '/manage/$schoolSlug/announcements'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/analytics': {
+      id: '/_authenticated/manage/$schoolSlug/analytics'
+      path: '/analytics'
+      fullPath: '/manage/$schoolSlug/analytics'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAnalyticsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/activity': {
@@ -1508,6 +1528,7 @@ const AuthenticatedManageSchoolSlugStudentsRouteWithChildren =
 interface AuthenticatedManageSchoolSlugRouteChildren {
   AuthenticatedManageSchoolSlugAcademicsRoute: typeof AuthenticatedManageSchoolSlugAcademicsRoute
   AuthenticatedManageSchoolSlugActivityRoute: typeof AuthenticatedManageSchoolSlugActivityRoute
+  AuthenticatedManageSchoolSlugAnalyticsRoute: typeof AuthenticatedManageSchoolSlugAnalyticsRoute
   AuthenticatedManageSchoolSlugAnnouncementsRoute: typeof AuthenticatedManageSchoolSlugAnnouncementsRoute
   AuthenticatedManageSchoolSlugAttendanceRoute: typeof AuthenticatedManageSchoolSlugAttendanceRoute
   AuthenticatedManageSchoolSlugCalendarRoute: typeof AuthenticatedManageSchoolSlugCalendarRoute
@@ -1565,6 +1586,8 @@ const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugR
       AuthenticatedManageSchoolSlugAcademicsRoute,
     AuthenticatedManageSchoolSlugActivityRoute:
       AuthenticatedManageSchoolSlugActivityRoute,
+    AuthenticatedManageSchoolSlugAnalyticsRoute:
+      AuthenticatedManageSchoolSlugAnalyticsRoute,
     AuthenticatedManageSchoolSlugAnnouncementsRoute:
       AuthenticatedManageSchoolSlugAnnouncementsRoute,
     AuthenticatedManageSchoolSlugAttendanceRoute:
