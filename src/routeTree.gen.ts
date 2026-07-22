@@ -55,6 +55,7 @@ import { Route as AuthenticatedManageSchoolSlugSearchAdvancedRouteImport } from 
 import { Route as AuthenticatedManageSchoolSlugReportsTeacherRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.teacher'
 import { Route as AuthenticatedManageSchoolSlugReportsSubjectRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.subject'
 import { Route as AuthenticatedManageSchoolSlugReportsSchoolRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.school'
+import { Route as AuthenticatedManageSchoolSlugReportsReportCardsRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.report-cards'
 import { Route as AuthenticatedManageSchoolSlugReportsNectaRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.necta'
 import { Route as AuthenticatedManageSchoolSlugReportsGenderRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.gender'
 import { Route as AuthenticatedManageSchoolSlugReportsCustomRouteImport } from './routes/_authenticated/manage.$schoolSlug.reports.custom'
@@ -74,6 +75,7 @@ import { Route as AuthenticatedManageSchoolSlugAssessmentPublishRouteImport } fr
 import { Route as AuthenticatedManageSchoolSlugAssessmentLocksRouteImport } from './routes/_authenticated/manage.$schoolSlug.assessment.locks'
 import { Route as AuthenticatedManageSchoolSlugAssessmentImportRouteImport } from './routes/_authenticated/manage.$schoolSlug.assessment.import'
 import { Route as AuthenticatedManageSchoolSlugAssessmentHistoryRouteImport } from './routes/_authenticated/manage.$schoolSlug.assessment.history'
+import { Route as AuthenticatedManageSchoolSlugAdminUsersRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.users'
 import { Route as AuthenticatedManageSchoolSlugAdminRolesRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.roles'
 import { Route as AuthenticatedManageSchoolSlugAdminIntegrationsRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.integrations'
 import { Route as AuthenticatedManageSchoolSlugAdminBranchesRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.branches'
@@ -81,6 +83,9 @@ import { Route as AuthenticatedManageSchoolSlugAdminBackupRouteImport } from './
 import { Route as AuthenticatedManageSchoolSlugAdminAuditRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.audit'
 import { Route as AuthenticatedManageSchoolSlugAdminApiKeysRouteImport } from './routes/_authenticated/manage.$schoolSlug.admin.api-keys'
 import { Route as AuthenticatedManageSchoolSlugAccountThemeRouteImport } from './routes/_authenticated/manage.$schoolSlug.account.theme'
+import { Route as AuthenticatedManageSchoolSlugAccountProfileRouteImport } from './routes/_authenticated/manage.$schoolSlug.account.profile'
+import { Route as AuthenticatedManageSchoolSlugAccountPasswordRouteImport } from './routes/_authenticated/manage.$schoolSlug.account.password'
+import { Route as AuthenticatedManageSchoolSlugAccountHelpRouteImport } from './routes/_authenticated/manage.$schoolSlug.account.help'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdReportsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId.reports'
 import { Route as AuthenticatedManageSchoolSlugExamsExamIdAnalyticsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams.$examId.analytics'
 
@@ -349,6 +354,12 @@ const AuthenticatedManageSchoolSlugReportsSchoolRoute =
     path: '/reports/school',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
+const AuthenticatedManageSchoolSlugReportsReportCardsRoute =
+  AuthenticatedManageSchoolSlugReportsReportCardsRouteImport.update({
+    id: '/reports/report-cards',
+    path: '/reports/report-cards',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugReportsNectaRoute =
   AuthenticatedManageSchoolSlugReportsNectaRouteImport.update({
     id: '/reports/necta',
@@ -463,6 +474,12 @@ const AuthenticatedManageSchoolSlugAssessmentHistoryRoute =
     path: '/assessment/history',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
+const AuthenticatedManageSchoolSlugAdminUsersRoute =
+  AuthenticatedManageSchoolSlugAdminUsersRouteImport.update({
+    id: '/admin/users',
+    path: '/admin/users',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugAdminRolesRoute =
   AuthenticatedManageSchoolSlugAdminRolesRouteImport.update({
     id: '/admin/roles',
@@ -503,6 +520,24 @@ const AuthenticatedManageSchoolSlugAccountThemeRoute =
   AuthenticatedManageSchoolSlugAccountThemeRouteImport.update({
     id: '/account/theme',
     path: '/account/theme',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugAccountProfileRoute =
+  AuthenticatedManageSchoolSlugAccountProfileRouteImport.update({
+    id: '/account/profile',
+    path: '/account/profile',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugAccountPasswordRoute =
+  AuthenticatedManageSchoolSlugAccountPasswordRouteImport.update({
+    id: '/account/password',
+    path: '/account/password',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugAccountHelpRoute =
+  AuthenticatedManageSchoolSlugAccountHelpRouteImport.update({
+    id: '/account/help',
+    path: '/account/help',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugExamsExamIdReportsRoute =
@@ -550,6 +585,9 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
   '/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
+  '/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
+  '/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
+  '/manage/$schoolSlug/account/profile': typeof AuthenticatedManageSchoolSlugAccountProfileRoute
   '/manage/$schoolSlug/account/theme': typeof AuthenticatedManageSchoolSlugAccountThemeRoute
   '/manage/$schoolSlug/admin/api-keys': typeof AuthenticatedManageSchoolSlugAdminApiKeysRoute
   '/manage/$schoolSlug/admin/audit': typeof AuthenticatedManageSchoolSlugAdminAuditRoute
@@ -557,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/admin/branches': typeof AuthenticatedManageSchoolSlugAdminBranchesRoute
   '/manage/$schoolSlug/admin/integrations': typeof AuthenticatedManageSchoolSlugAdminIntegrationsRoute
   '/manage/$schoolSlug/admin/roles': typeof AuthenticatedManageSchoolSlugAdminRolesRoute
+  '/manage/$schoolSlug/admin/users': typeof AuthenticatedManageSchoolSlugAdminUsersRoute
   '/manage/$schoolSlug/assessment/history': typeof AuthenticatedManageSchoolSlugAssessmentHistoryRoute
   '/manage/$schoolSlug/assessment/import': typeof AuthenticatedManageSchoolSlugAssessmentImportRoute
   '/manage/$schoolSlug/assessment/locks': typeof AuthenticatedManageSchoolSlugAssessmentLocksRoute
@@ -576,6 +615,7 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/reports/custom': typeof AuthenticatedManageSchoolSlugReportsCustomRoute
   '/manage/$schoolSlug/reports/gender': typeof AuthenticatedManageSchoolSlugReportsGenderRoute
   '/manage/$schoolSlug/reports/necta': typeof AuthenticatedManageSchoolSlugReportsNectaRoute
+  '/manage/$schoolSlug/reports/report-cards': typeof AuthenticatedManageSchoolSlugReportsReportCardsRoute
   '/manage/$schoolSlug/reports/school': typeof AuthenticatedManageSchoolSlugReportsSchoolRoute
   '/manage/$schoolSlug/reports/subject': typeof AuthenticatedManageSchoolSlugReportsSubjectRoute
   '/manage/$schoolSlug/reports/teacher': typeof AuthenticatedManageSchoolSlugReportsTeacherRoute
@@ -624,6 +664,9 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugIndexRoute
+  '/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
+  '/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
+  '/manage/$schoolSlug/account/profile': typeof AuthenticatedManageSchoolSlugAccountProfileRoute
   '/manage/$schoolSlug/account/theme': typeof AuthenticatedManageSchoolSlugAccountThemeRoute
   '/manage/$schoolSlug/admin/api-keys': typeof AuthenticatedManageSchoolSlugAdminApiKeysRoute
   '/manage/$schoolSlug/admin/audit': typeof AuthenticatedManageSchoolSlugAdminAuditRoute
@@ -631,6 +674,7 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/admin/branches': typeof AuthenticatedManageSchoolSlugAdminBranchesRoute
   '/manage/$schoolSlug/admin/integrations': typeof AuthenticatedManageSchoolSlugAdminIntegrationsRoute
   '/manage/$schoolSlug/admin/roles': typeof AuthenticatedManageSchoolSlugAdminRolesRoute
+  '/manage/$schoolSlug/admin/users': typeof AuthenticatedManageSchoolSlugAdminUsersRoute
   '/manage/$schoolSlug/assessment/history': typeof AuthenticatedManageSchoolSlugAssessmentHistoryRoute
   '/manage/$schoolSlug/assessment/import': typeof AuthenticatedManageSchoolSlugAssessmentImportRoute
   '/manage/$schoolSlug/assessment/locks': typeof AuthenticatedManageSchoolSlugAssessmentLocksRoute
@@ -650,6 +694,7 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/reports/custom': typeof AuthenticatedManageSchoolSlugReportsCustomRoute
   '/manage/$schoolSlug/reports/gender': typeof AuthenticatedManageSchoolSlugReportsGenderRoute
   '/manage/$schoolSlug/reports/necta': typeof AuthenticatedManageSchoolSlugReportsNectaRoute
+  '/manage/$schoolSlug/reports/report-cards': typeof AuthenticatedManageSchoolSlugReportsReportCardsRoute
   '/manage/$schoolSlug/reports/school': typeof AuthenticatedManageSchoolSlugReportsSchoolRoute
   '/manage/$schoolSlug/reports/subject': typeof AuthenticatedManageSchoolSlugReportsSubjectRoute
   '/manage/$schoolSlug/reports/teacher': typeof AuthenticatedManageSchoolSlugReportsTeacherRoute
@@ -701,6 +746,9 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/_authenticated/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
   '/_authenticated/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
+  '/_authenticated/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
+  '/_authenticated/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
+  '/_authenticated/manage/$schoolSlug/account/profile': typeof AuthenticatedManageSchoolSlugAccountProfileRoute
   '/_authenticated/manage/$schoolSlug/account/theme': typeof AuthenticatedManageSchoolSlugAccountThemeRoute
   '/_authenticated/manage/$schoolSlug/admin/api-keys': typeof AuthenticatedManageSchoolSlugAdminApiKeysRoute
   '/_authenticated/manage/$schoolSlug/admin/audit': typeof AuthenticatedManageSchoolSlugAdminAuditRoute
@@ -708,6 +756,7 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/admin/branches': typeof AuthenticatedManageSchoolSlugAdminBranchesRoute
   '/_authenticated/manage/$schoolSlug/admin/integrations': typeof AuthenticatedManageSchoolSlugAdminIntegrationsRoute
   '/_authenticated/manage/$schoolSlug/admin/roles': typeof AuthenticatedManageSchoolSlugAdminRolesRoute
+  '/_authenticated/manage/$schoolSlug/admin/users': typeof AuthenticatedManageSchoolSlugAdminUsersRoute
   '/_authenticated/manage/$schoolSlug/assessment/history': typeof AuthenticatedManageSchoolSlugAssessmentHistoryRoute
   '/_authenticated/manage/$schoolSlug/assessment/import': typeof AuthenticatedManageSchoolSlugAssessmentImportRoute
   '/_authenticated/manage/$schoolSlug/assessment/locks': typeof AuthenticatedManageSchoolSlugAssessmentLocksRoute
@@ -727,6 +776,7 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/reports/custom': typeof AuthenticatedManageSchoolSlugReportsCustomRoute
   '/_authenticated/manage/$schoolSlug/reports/gender': typeof AuthenticatedManageSchoolSlugReportsGenderRoute
   '/_authenticated/manage/$schoolSlug/reports/necta': typeof AuthenticatedManageSchoolSlugReportsNectaRoute
+  '/_authenticated/manage/$schoolSlug/reports/report-cards': typeof AuthenticatedManageSchoolSlugReportsReportCardsRoute
   '/_authenticated/manage/$schoolSlug/reports/school': typeof AuthenticatedManageSchoolSlugReportsSchoolRoute
   '/_authenticated/manage/$schoolSlug/reports/subject': typeof AuthenticatedManageSchoolSlugReportsSubjectRoute
   '/_authenticated/manage/$schoolSlug/reports/teacher': typeof AuthenticatedManageSchoolSlugReportsTeacherRoute
@@ -778,6 +828,9 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/timetable'
     | '/manage/$schoolSlug/years'
     | '/manage/$schoolSlug/'
+    | '/manage/$schoolSlug/account/help'
+    | '/manage/$schoolSlug/account/password'
+    | '/manage/$schoolSlug/account/profile'
     | '/manage/$schoolSlug/account/theme'
     | '/manage/$schoolSlug/admin/api-keys'
     | '/manage/$schoolSlug/admin/audit'
@@ -785,6 +838,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/admin/branches'
     | '/manage/$schoolSlug/admin/integrations'
     | '/manage/$schoolSlug/admin/roles'
+    | '/manage/$schoolSlug/admin/users'
     | '/manage/$schoolSlug/assessment/history'
     | '/manage/$schoolSlug/assessment/import'
     | '/manage/$schoolSlug/assessment/locks'
@@ -804,6 +858,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/reports/custom'
     | '/manage/$schoolSlug/reports/gender'
     | '/manage/$schoolSlug/reports/necta'
+    | '/manage/$schoolSlug/reports/report-cards'
     | '/manage/$schoolSlug/reports/school'
     | '/manage/$schoolSlug/reports/subject'
     | '/manage/$schoolSlug/reports/teacher'
@@ -852,6 +907,9 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/timetable'
     | '/manage/$schoolSlug/years'
     | '/manage/$schoolSlug'
+    | '/manage/$schoolSlug/account/help'
+    | '/manage/$schoolSlug/account/password'
+    | '/manage/$schoolSlug/account/profile'
     | '/manage/$schoolSlug/account/theme'
     | '/manage/$schoolSlug/admin/api-keys'
     | '/manage/$schoolSlug/admin/audit'
@@ -859,6 +917,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/admin/branches'
     | '/manage/$schoolSlug/admin/integrations'
     | '/manage/$schoolSlug/admin/roles'
+    | '/manage/$schoolSlug/admin/users'
     | '/manage/$schoolSlug/assessment/history'
     | '/manage/$schoolSlug/assessment/import'
     | '/manage/$schoolSlug/assessment/locks'
@@ -878,6 +937,7 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/reports/custom'
     | '/manage/$schoolSlug/reports/gender'
     | '/manage/$schoolSlug/reports/necta'
+    | '/manage/$schoolSlug/reports/report-cards'
     | '/manage/$schoolSlug/reports/school'
     | '/manage/$schoolSlug/reports/subject'
     | '/manage/$schoolSlug/reports/teacher'
@@ -928,6 +988,9 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/timetable'
     | '/_authenticated/manage/$schoolSlug/years'
     | '/_authenticated/manage/$schoolSlug/'
+    | '/_authenticated/manage/$schoolSlug/account/help'
+    | '/_authenticated/manage/$schoolSlug/account/password'
+    | '/_authenticated/manage/$schoolSlug/account/profile'
     | '/_authenticated/manage/$schoolSlug/account/theme'
     | '/_authenticated/manage/$schoolSlug/admin/api-keys'
     | '/_authenticated/manage/$schoolSlug/admin/audit'
@@ -935,6 +998,7 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/admin/branches'
     | '/_authenticated/manage/$schoolSlug/admin/integrations'
     | '/_authenticated/manage/$schoolSlug/admin/roles'
+    | '/_authenticated/manage/$schoolSlug/admin/users'
     | '/_authenticated/manage/$schoolSlug/assessment/history'
     | '/_authenticated/manage/$schoolSlug/assessment/import'
     | '/_authenticated/manage/$schoolSlug/assessment/locks'
@@ -954,6 +1018,7 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/reports/custom'
     | '/_authenticated/manage/$schoolSlug/reports/gender'
     | '/_authenticated/manage/$schoolSlug/reports/necta'
+    | '/_authenticated/manage/$schoolSlug/reports/report-cards'
     | '/_authenticated/manage/$schoolSlug/reports/school'
     | '/_authenticated/manage/$schoolSlug/reports/subject'
     | '/_authenticated/manage/$schoolSlug/reports/teacher'
@@ -1309,6 +1374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugReportsSchoolRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
+    '/_authenticated/manage/$schoolSlug/reports/report-cards': {
+      id: '/_authenticated/manage/$schoolSlug/reports/report-cards'
+      path: '/reports/report-cards'
+      fullPath: '/manage/$schoolSlug/reports/report-cards'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugReportsReportCardsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
     '/_authenticated/manage/$schoolSlug/reports/necta': {
       id: '/_authenticated/manage/$schoolSlug/reports/necta'
       path: '/reports/necta'
@@ -1442,6 +1514,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugAssessmentHistoryRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
+    '/_authenticated/manage/$schoolSlug/admin/users': {
+      id: '/_authenticated/manage/$schoolSlug/admin/users'
+      path: '/admin/users'
+      fullPath: '/manage/$schoolSlug/admin/users'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
     '/_authenticated/manage/$schoolSlug/admin/roles': {
       id: '/_authenticated/manage/$schoolSlug/admin/roles'
       path: '/admin/roles'
@@ -1489,6 +1568,27 @@ declare module '@tanstack/react-router' {
       path: '/account/theme'
       fullPath: '/manage/$schoolSlug/account/theme'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugAccountThemeRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/account/profile': {
+      id: '/_authenticated/manage/$schoolSlug/account/profile'
+      path: '/account/profile'
+      fullPath: '/manage/$schoolSlug/account/profile'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAccountProfileRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/account/password': {
+      id: '/_authenticated/manage/$schoolSlug/account/password'
+      path: '/account/password'
+      fullPath: '/manage/$schoolSlug/account/password'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAccountPasswordRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/account/help': {
+      id: '/_authenticated/manage/$schoolSlug/account/help'
+      path: '/account/help'
+      fullPath: '/manage/$schoolSlug/account/help'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugAccountHelpRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/exams/$examId/reports': {
@@ -1585,6 +1685,9 @@ interface AuthenticatedManageSchoolSlugRouteChildren {
   AuthenticatedManageSchoolSlugTimetableRoute: typeof AuthenticatedManageSchoolSlugTimetableRoute
   AuthenticatedManageSchoolSlugYearsRoute: typeof AuthenticatedManageSchoolSlugYearsRoute
   AuthenticatedManageSchoolSlugIndexRoute: typeof AuthenticatedManageSchoolSlugIndexRoute
+  AuthenticatedManageSchoolSlugAccountHelpRoute: typeof AuthenticatedManageSchoolSlugAccountHelpRoute
+  AuthenticatedManageSchoolSlugAccountPasswordRoute: typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
+  AuthenticatedManageSchoolSlugAccountProfileRoute: typeof AuthenticatedManageSchoolSlugAccountProfileRoute
   AuthenticatedManageSchoolSlugAccountThemeRoute: typeof AuthenticatedManageSchoolSlugAccountThemeRoute
   AuthenticatedManageSchoolSlugAdminApiKeysRoute: typeof AuthenticatedManageSchoolSlugAdminApiKeysRoute
   AuthenticatedManageSchoolSlugAdminAuditRoute: typeof AuthenticatedManageSchoolSlugAdminAuditRoute
@@ -1592,6 +1695,7 @@ interface AuthenticatedManageSchoolSlugRouteChildren {
   AuthenticatedManageSchoolSlugAdminBranchesRoute: typeof AuthenticatedManageSchoolSlugAdminBranchesRoute
   AuthenticatedManageSchoolSlugAdminIntegrationsRoute: typeof AuthenticatedManageSchoolSlugAdminIntegrationsRoute
   AuthenticatedManageSchoolSlugAdminRolesRoute: typeof AuthenticatedManageSchoolSlugAdminRolesRoute
+  AuthenticatedManageSchoolSlugAdminUsersRoute: typeof AuthenticatedManageSchoolSlugAdminUsersRoute
   AuthenticatedManageSchoolSlugAssessmentHistoryRoute: typeof AuthenticatedManageSchoolSlugAssessmentHistoryRoute
   AuthenticatedManageSchoolSlugAssessmentImportRoute: typeof AuthenticatedManageSchoolSlugAssessmentImportRoute
   AuthenticatedManageSchoolSlugAssessmentLocksRoute: typeof AuthenticatedManageSchoolSlugAssessmentLocksRoute
@@ -1610,6 +1714,7 @@ interface AuthenticatedManageSchoolSlugRouteChildren {
   AuthenticatedManageSchoolSlugReportsCustomRoute: typeof AuthenticatedManageSchoolSlugReportsCustomRoute
   AuthenticatedManageSchoolSlugReportsGenderRoute: typeof AuthenticatedManageSchoolSlugReportsGenderRoute
   AuthenticatedManageSchoolSlugReportsNectaRoute: typeof AuthenticatedManageSchoolSlugReportsNectaRoute
+  AuthenticatedManageSchoolSlugReportsReportCardsRoute: typeof AuthenticatedManageSchoolSlugReportsReportCardsRoute
   AuthenticatedManageSchoolSlugReportsSchoolRoute: typeof AuthenticatedManageSchoolSlugReportsSchoolRoute
   AuthenticatedManageSchoolSlugReportsSubjectRoute: typeof AuthenticatedManageSchoolSlugReportsSubjectRoute
   AuthenticatedManageSchoolSlugReportsTeacherRoute: typeof AuthenticatedManageSchoolSlugReportsTeacherRoute
@@ -1662,6 +1767,12 @@ const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugR
       AuthenticatedManageSchoolSlugYearsRoute,
     AuthenticatedManageSchoolSlugIndexRoute:
       AuthenticatedManageSchoolSlugIndexRoute,
+    AuthenticatedManageSchoolSlugAccountHelpRoute:
+      AuthenticatedManageSchoolSlugAccountHelpRoute,
+    AuthenticatedManageSchoolSlugAccountPasswordRoute:
+      AuthenticatedManageSchoolSlugAccountPasswordRoute,
+    AuthenticatedManageSchoolSlugAccountProfileRoute:
+      AuthenticatedManageSchoolSlugAccountProfileRoute,
     AuthenticatedManageSchoolSlugAccountThemeRoute:
       AuthenticatedManageSchoolSlugAccountThemeRoute,
     AuthenticatedManageSchoolSlugAdminApiKeysRoute:
@@ -1676,6 +1787,8 @@ const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugR
       AuthenticatedManageSchoolSlugAdminIntegrationsRoute,
     AuthenticatedManageSchoolSlugAdminRolesRoute:
       AuthenticatedManageSchoolSlugAdminRolesRoute,
+    AuthenticatedManageSchoolSlugAdminUsersRoute:
+      AuthenticatedManageSchoolSlugAdminUsersRoute,
     AuthenticatedManageSchoolSlugAssessmentHistoryRoute:
       AuthenticatedManageSchoolSlugAssessmentHistoryRoute,
     AuthenticatedManageSchoolSlugAssessmentImportRoute:
@@ -1712,6 +1825,8 @@ const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugR
       AuthenticatedManageSchoolSlugReportsGenderRoute,
     AuthenticatedManageSchoolSlugReportsNectaRoute:
       AuthenticatedManageSchoolSlugReportsNectaRoute,
+    AuthenticatedManageSchoolSlugReportsReportCardsRoute:
+      AuthenticatedManageSchoolSlugReportsReportCardsRoute,
     AuthenticatedManageSchoolSlugReportsSchoolRoute:
       AuthenticatedManageSchoolSlugReportsSchoolRoute,
     AuthenticatedManageSchoolSlugReportsSubjectRoute:

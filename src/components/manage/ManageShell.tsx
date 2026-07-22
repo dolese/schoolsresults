@@ -135,16 +135,15 @@ function ManageShellInner({
       exact?: boolean;
       sub?: { to: string; label: string }[];
       external?: boolean;
-      soon?: boolean;
     }[];
   }[] = [
     {
       label: "Dashboard",
       items: [
         { to: base, label: "Overview", icon: LayoutDashboard, exact: true },
-        { to: `${base}/analytics`, label: "Analytics", icon: BarChart3, soon: true },
-        { to: `${base}/activity`, label: "Recent activity", icon: Activity, soon: true },
-        { to: `${base}/notifications`, label: "Notifications", icon: Bell, soon: true },
+        { to: `${base}/analytics`, label: "Analytics", icon: BarChart3 },
+        { to: `${base}/activity`, label: "Recent activity", icon: Activity },
+        { to: `${base}/notifications`, label: "Notifications", icon: Bell },
       ],
     },
     {
@@ -152,97 +151,97 @@ function ManageShellInner({
       items: [
         { to: `${base}/academics`, label: "Subjects & forms", icon: BookOpen },
         { to: `${base}/exams`, label: "Examinations", icon: ClipboardList },
-        { to: `${base}/results`, label: "Results", icon: Award, soon: true },
-        { to: `${base}/classes`, label: "Classes & streams", icon: Layers, soon: true },
-        { to: `${base}/years`, label: "Academic years", icon: CalendarRange, soon: true },
-        { to: `${base}/terms`, label: "Terms", icon: CalendarDays, soon: true },
-        { to: `${base}/grading`, label: "Grading system", icon: Sparkles, soon: true },
-        { to: `${base}/rankings`, label: "Rankings", icon: ListOrdered, soon: true },
-        { to: `${base}/merit-list`, label: "Merit list", icon: Medal, soon: true },
+        { to: `${base}/results`, label: "Results", icon: Award },
+        { to: `${base}/classes`, label: "Classes & streams", icon: Layers },
+        { to: `${base}/years`, label: "Academic years", icon: CalendarRange },
+        { to: `${base}/terms`, label: "Terms", icon: CalendarDays },
+        { to: `${base}/grading`, label: "Grading system", icon: Sparkles },
+        { to: `${base}/rankings`, label: "Rankings", icon: ListOrdered },
+        { to: `${base}/merit-list`, label: "Merit list", icon: Medal },
       ],
     },
     {
       label: "Students",
       items: [
         { to: `${base}/students`, label: "Student list", icon: Users },
-        { to: `${base}/students/profiles`, label: "Profiles", icon: UserCircle2, soon: true },
-        { to: `${base}/students/admission`, label: "Admission", icon: UserPlus, soon: true },
-        { to: `${base}/students/promotion`, label: "Promotion", icon: ArrowUpRight, soon: true },
-        { to: `${base}/students/alumni`, label: "Alumni", icon: Users2, soon: true },
+        { to: `${base}/students/profiles`, label: "Profiles", icon: UserCircle2 },
+        { to: `${base}/students/admission`, label: "Admission", icon: UserPlus },
+        { to: `${base}/students/promotion`, label: "Promotion", icon: ArrowUpRight },
+        { to: `${base}/students/alumni`, label: "Alumni", icon: Users2 },
       ],
     },
     {
       label: "Staff",
       items: [
-        { to: `${base}/staff/teachers`, label: "Teachers", icon: Presentation, soon: true },
-        { to: `${base}/staff/class-teachers`, label: "Class teachers", icon: UserCheck, soon: true },
-        { to: `${base}/staff/subject-teachers`, label: "Subject teachers", icon: BookOpen, soon: true },
-        { to: `${base}/staff/departments`, label: "Departments", icon: Building2, soon: true },
+        { to: `${base}/staff/teachers`, label: "Teachers", icon: Presentation },
+        { to: `${base}/staff/class-teachers`, label: "Class teachers", icon: UserCheck },
+        { to: `${base}/staff/subject-teachers`, label: "Subject teachers", icon: BookOpen },
+        { to: `${base}/staff/departments`, label: "Departments", icon: Building2 },
       ],
     },
     {
       label: "Assessment",
       items: [
         { to: `${base}/exams`, label: "Marks entry", icon: ClipboardCheck },
-        { to: `${base}/assessment/import`, label: "Bulk import marks", icon: FileSpreadsheet, soon: true },
-        { to: `${base}/assessment/verify`, label: "Verify results", icon: CheckCircle2, soon: true },
-        { to: `${base}/assessment/publish`, label: "Publish results", icon: Send, soon: true },
-        { to: `${base}/assessment/history`, label: "Result history", icon: History, soon: true },
-        { to: `${base}/assessment/locks`, label: "Lock / unlock", icon: Lock, soon: true },
+        { to: `${base}/assessment/import`, label: "Bulk import marks", icon: FileSpreadsheet },
+        { to: `${base}/assessment/verify`, label: "Verify results", icon: CheckCircle2 },
+        { to: `${base}/assessment/publish`, label: "Publish results", icon: Send },
+        { to: `${base}/assessment/history`, label: "Result history", icon: History },
+        { to: `${base}/assessment/locks`, label: "Lock / unlock", icon: Lock },
       ],
     },
     {
       label: "Reports",
       items: [
-        { to: `${base}/reports/report-cards`, label: "Report cards", icon: FileBarChart, soon: true },
-        { to: `${base}/reports/class`, label: "Class performance", icon: BarChart3, soon: true },
-        { to: `${base}/reports/subject`, label: "Subject analysis", icon: PieChart, soon: true },
-        { to: `${base}/reports/gender`, label: "Gender analysis", icon: LineChart, soon: true },
-        { to: `${base}/reports/teacher`, label: "Teacher performance", icon: UserCheck, soon: true },
-        { to: `${base}/reports/school`, label: "School performance", icon: School, soon: true },
-        { to: `${base}/reports/necta`, label: "NECTA analysis", icon: Trophy, soon: true },
-        { to: `${base}/reports/custom`, label: "Custom reports", icon: SlidersHorizontal, soon: true },
+        { to: `${base}/reports/report-cards`, label: "Report cards", icon: FileBarChart },
+        { to: `${base}/reports/class`, label: "Class performance", icon: BarChart3 },
+        { to: `${base}/reports/subject`, label: "Subject analysis", icon: PieChart },
+        { to: `${base}/reports/gender`, label: "Gender analysis", icon: LineChart },
+        { to: `${base}/reports/teacher`, label: "Teacher performance", icon: UserCheck },
+        { to: `${base}/reports/school`, label: "School performance", icon: School },
+        { to: `${base}/reports/necta`, label: "NECTA analysis", icon: Trophy },
+        { to: `${base}/reports/custom`, label: "Custom reports", icon: SlidersHorizontal },
       ],
     },
     {
       label: "Documents",
       items: [
-        { to: `${base}/docs/certificates`, label: "Certificates", icon: ScrollText, soon: true },
-        { to: `${base}/docs/testimonials`, label: "Testimonials", icon: FileText, soon: true },
-        { to: `${base}/docs/templates`, label: "Report templates", icon: Files, soon: true },
-        { to: `${base}/docs/print`, label: "Print center", icon: Printer, soon: true },
+        { to: `${base}/docs/certificates`, label: "Certificates", icon: ScrollText },
+        { to: `${base}/docs/testimonials`, label: "Testimonials", icon: FileText },
+        { to: `${base}/docs/templates`, label: "Report templates", icon: Files },
+        { to: `${base}/docs/print`, label: "Print center", icon: Printer },
       ],
     },
     {
       label: "Community",
       items: [
         { to: `${base}/announcements`, label: "Announcements", icon: Megaphone },
-        { to: `${base}/community/sms`, label: "SMS", icon: MessageSquare, soon: true },
-        { to: `${base}/community/email`, label: "Email", icon: Mail, soon: true },
-        { to: `${base}/community/notifications`, label: "Notifications", icon: Bell, soon: true },
+        { to: `${base}/community/sms`, label: "SMS", icon: MessageSquare },
+        { to: `${base}/community/email`, label: "Email", icon: Mail },
+        { to: `${base}/community/notifications`, label: "Notifications", icon: Bell },
       ],
     },
     {
       label: "School management",
       items: [
-        { to: `${base}/calendar`, label: "Academic calendar", icon: CalendarDays, soon: true },
-        { to: `${base}/timetable`, label: "Timetable", icon: Clock, soon: true },
-        { to: `${base}/attendance`, label: "Attendance", icon: ClipboardCheck, soon: true },
+        { to: `${base}/calendar`, label: "Academic calendar", icon: CalendarDays },
+        { to: `${base}/timetable`, label: "Timetable", icon: Clock },
+        { to: `${base}/attendance`, label: "Attendance", icon: ClipboardCheck },
       ],
     },
     {
       label: "Finance",
       items: [
-        { to: `${base}/finance/fees`, label: "Fee status", icon: Wallet, soon: true },
-        { to: `${base}/finance/payments`, label: "Payment history", icon: Receipt, soon: true },
+        { to: `${base}/finance/fees`, label: "Fee status", icon: Wallet },
+        { to: `${base}/finance/payments`, label: "Payment history", icon: Receipt },
       ],
     },
     {
       label: "Search",
       items: [
-        { to: `${base}/search/student`, label: "Find student", icon: Search, soon: true },
-        { to: `${base}/search/results`, label: "Find results", icon: Search, soon: true },
-        { to: `${base}/search/advanced`, label: "Advanced search", icon: Search, soon: true },
+        { to: `${base}/search/student`, label: "Find student", icon: Search },
+        { to: `${base}/search/results`, label: "Find results", icon: Search },
+        { to: `${base}/search/advanced`, label: "Advanced search", icon: Search },
       ],
     },
     {
@@ -257,22 +256,22 @@ function ManageShellInner({
       label: "Administration",
       items: [
         { to: `${base}/settings`, label: "Settings", icon: Settings },
-        { to: `${base}/admin/users`, label: "Users", icon: Users, soon: true },
-        { to: `${base}/admin/roles`, label: "Roles & permissions", icon: ShieldCheck, soon: true },
-        { to: `${base}/admin/branches`, label: "Branches / campuses", icon: Building2, soon: true },
-        { to: `${base}/admin/audit`, label: "Audit logs", icon: History, soon: true },
-        { to: `${base}/admin/api-keys`, label: "API keys", icon: KeyRound, soon: true },
-        { to: `${base}/admin/integrations`, label: "Integrations", icon: Plug, soon: true },
-        { to: `${base}/admin/backup`, label: "Backup & restore", icon: DatabaseBackup, soon: true },
+        { to: `${base}/admin/users`, label: "Users", icon: Users },
+        { to: `${base}/admin/roles`, label: "Roles & permissions", icon: ShieldCheck },
+        { to: `${base}/admin/branches`, label: "Branches / campuses", icon: Building2 },
+        { to: `${base}/admin/audit`, label: "Audit logs", icon: History },
+        { to: `${base}/admin/api-keys`, label: "API keys", icon: KeyRound },
+        { to: `${base}/admin/integrations`, label: "Integrations", icon: Plug },
+        { to: `${base}/admin/backup`, label: "Backup & restore", icon: DatabaseBackup },
       ],
     },
     {
       label: "Account",
       items: [
-        { to: `${base}/account/profile`, label: "My profile", icon: UserCircle2, soon: true },
-        { to: `${base}/account/password`, label: "Change password", icon: KeySquare, soon: true },
-        { to: `${base}/account/theme`, label: "Theme", icon: Palette, soon: true },
-        { to: `${base}/account/help`, label: "Help & support", icon: LifeBuoy, soon: true },
+        { to: `${base}/account/profile`, label: "My profile", icon: UserCircle2 },
+        { to: `${base}/account/password`, label: "Change password", icon: KeySquare },
+        { to: `${base}/account/theme`, label: "Theme", icon: Palette },
+        { to: `${base}/account/help`, label: "Help & support", icon: LifeBuoy },
       ],
     },
   ];
@@ -314,23 +313,6 @@ function ManageShellInner({
                                 <span>{it.label}</span>
                                 <ExternalLink className="ml-auto h-3 w-3 opacity-60" />
                               </a>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        );
-                      }
-                      if (it.soon) {
-                        return (
-                          <SidebarMenuItem key={it.to}>
-                            <SidebarMenuButton
-                              tooltip={`${it.label} — coming soon`}
-                              disabled
-                              className="cursor-not-allowed opacity-60"
-                            >
-                              <it.icon className="h-4 w-4" />
-                              <span>{it.label}</span>
-                              <span className="ml-auto rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground group-data-[collapsible=icon]:hidden">
-                                Soon
-                              </span>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
                         );
