@@ -28,7 +28,9 @@ import { Route as AuthenticatedManageSchoolSlugTermsRouteImport } from './routes
 import { Route as AuthenticatedManageSchoolSlugStudentsRouteImport } from './routes/_authenticated/manage.$schoolSlug.students'
 import { Route as AuthenticatedManageSchoolSlugSettingsRouteImport } from './routes/_authenticated/manage.$schoolSlug.settings'
 import { Route as AuthenticatedManageSchoolSlugResultsRouteImport } from './routes/_authenticated/manage.$schoolSlug.results'
+import { Route as AuthenticatedManageSchoolSlugRankingsRouteImport } from './routes/_authenticated/manage.$schoolSlug.rankings'
 import { Route as AuthenticatedManageSchoolSlugNotificationsRouteImport } from './routes/_authenticated/manage.$schoolSlug.notifications'
+import { Route as AuthenticatedManageSchoolSlugMeritListRouteImport } from './routes/_authenticated/manage.$schoolSlug.merit-list'
 import { Route as AuthenticatedManageSchoolSlugGradingRouteImport } from './routes/_authenticated/manage.$schoolSlug.grading'
 import { Route as AuthenticatedManageSchoolSlugExamsRouteImport } from './routes/_authenticated/manage.$schoolSlug.exams'
 import { Route as AuthenticatedManageSchoolSlugClassesRouteImport } from './routes/_authenticated/manage.$schoolSlug.classes'
@@ -185,10 +187,22 @@ const AuthenticatedManageSchoolSlugResultsRoute =
     path: '/results',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
+const AuthenticatedManageSchoolSlugRankingsRoute =
+  AuthenticatedManageSchoolSlugRankingsRouteImport.update({
+    id: '/rankings',
+    path: '/rankings',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugNotificationsRoute =
   AuthenticatedManageSchoolSlugNotificationsRouteImport.update({
     id: '/notifications',
     path: '/notifications',
+    getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageSchoolSlugMeritListRoute =
+  AuthenticatedManageSchoolSlugMeritListRouteImport.update({
+    id: '/merit-list',
+    path: '/merit-list',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
   } as any)
 const AuthenticatedManageSchoolSlugGradingRoute =
@@ -526,7 +540,9 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/classes': typeof AuthenticatedManageSchoolSlugClassesRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/manage/$schoolSlug/grading': typeof AuthenticatedManageSchoolSlugGradingRoute
+  '/manage/$schoolSlug/merit-list': typeof AuthenticatedManageSchoolSlugMeritListRoute
   '/manage/$schoolSlug/notifications': typeof AuthenticatedManageSchoolSlugNotificationsRoute
+  '/manage/$schoolSlug/rankings': typeof AuthenticatedManageSchoolSlugRankingsRoute
   '/manage/$schoolSlug/results': typeof AuthenticatedManageSchoolSlugResultsRoute
   '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRouteWithChildren
@@ -598,7 +614,9 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/classes': typeof AuthenticatedManageSchoolSlugClassesRoute
   '/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/manage/$schoolSlug/grading': typeof AuthenticatedManageSchoolSlugGradingRoute
+  '/manage/$schoolSlug/merit-list': typeof AuthenticatedManageSchoolSlugMeritListRoute
   '/manage/$schoolSlug/notifications': typeof AuthenticatedManageSchoolSlugNotificationsRoute
+  '/manage/$schoolSlug/rankings': typeof AuthenticatedManageSchoolSlugRankingsRoute
   '/manage/$schoolSlug/results': typeof AuthenticatedManageSchoolSlugResultsRoute
   '/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRouteWithChildren
@@ -673,7 +691,9 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/classes': typeof AuthenticatedManageSchoolSlugClassesRoute
   '/_authenticated/manage/$schoolSlug/exams': typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   '/_authenticated/manage/$schoolSlug/grading': typeof AuthenticatedManageSchoolSlugGradingRoute
+  '/_authenticated/manage/$schoolSlug/merit-list': typeof AuthenticatedManageSchoolSlugMeritListRoute
   '/_authenticated/manage/$schoolSlug/notifications': typeof AuthenticatedManageSchoolSlugNotificationsRoute
+  '/_authenticated/manage/$schoolSlug/rankings': typeof AuthenticatedManageSchoolSlugRankingsRoute
   '/_authenticated/manage/$schoolSlug/results': typeof AuthenticatedManageSchoolSlugResultsRoute
   '/_authenticated/manage/$schoolSlug/settings': typeof AuthenticatedManageSchoolSlugSettingsRoute
   '/_authenticated/manage/$schoolSlug/students': typeof AuthenticatedManageSchoolSlugStudentsRouteWithChildren
@@ -748,7 +768,9 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/classes'
     | '/manage/$schoolSlug/exams'
     | '/manage/$schoolSlug/grading'
+    | '/manage/$schoolSlug/merit-list'
     | '/manage/$schoolSlug/notifications'
+    | '/manage/$schoolSlug/rankings'
     | '/manage/$schoolSlug/results'
     | '/manage/$schoolSlug/settings'
     | '/manage/$schoolSlug/students'
@@ -820,7 +842,9 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/classes'
     | '/manage/$schoolSlug/exams'
     | '/manage/$schoolSlug/grading'
+    | '/manage/$schoolSlug/merit-list'
     | '/manage/$schoolSlug/notifications'
+    | '/manage/$schoolSlug/rankings'
     | '/manage/$schoolSlug/results'
     | '/manage/$schoolSlug/settings'
     | '/manage/$schoolSlug/students'
@@ -894,7 +918,9 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/classes'
     | '/_authenticated/manage/$schoolSlug/exams'
     | '/_authenticated/manage/$schoolSlug/grading'
+    | '/_authenticated/manage/$schoolSlug/merit-list'
     | '/_authenticated/manage/$schoolSlug/notifications'
+    | '/_authenticated/manage/$schoolSlug/rankings'
     | '/_authenticated/manage/$schoolSlug/results'
     | '/_authenticated/manage/$schoolSlug/settings'
     | '/_authenticated/manage/$schoolSlug/students'
@@ -1094,11 +1120,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugResultsRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
+    '/_authenticated/manage/$schoolSlug/rankings': {
+      id: '/_authenticated/manage/$schoolSlug/rankings'
+      path: '/rankings'
+      fullPath: '/manage/$schoolSlug/rankings'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugRankingsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
     '/_authenticated/manage/$schoolSlug/notifications': {
       id: '/_authenticated/manage/$schoolSlug/notifications'
       path: '/notifications'
       fullPath: '/manage/$schoolSlug/notifications'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugNotificationsRouteImport
+      parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/$schoolSlug/merit-list': {
+      id: '/_authenticated/manage/$schoolSlug/merit-list'
+      path: '/merit-list'
+      fullPath: '/manage/$schoolSlug/merit-list'
+      preLoaderRoute: typeof AuthenticatedManageSchoolSlugMeritListRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
     }
     '/_authenticated/manage/$schoolSlug/grading': {
@@ -1535,7 +1575,9 @@ interface AuthenticatedManageSchoolSlugRouteChildren {
   AuthenticatedManageSchoolSlugClassesRoute: typeof AuthenticatedManageSchoolSlugClassesRoute
   AuthenticatedManageSchoolSlugExamsRoute: typeof AuthenticatedManageSchoolSlugExamsRouteWithChildren
   AuthenticatedManageSchoolSlugGradingRoute: typeof AuthenticatedManageSchoolSlugGradingRoute
+  AuthenticatedManageSchoolSlugMeritListRoute: typeof AuthenticatedManageSchoolSlugMeritListRoute
   AuthenticatedManageSchoolSlugNotificationsRoute: typeof AuthenticatedManageSchoolSlugNotificationsRoute
+  AuthenticatedManageSchoolSlugRankingsRoute: typeof AuthenticatedManageSchoolSlugRankingsRoute
   AuthenticatedManageSchoolSlugResultsRoute: typeof AuthenticatedManageSchoolSlugResultsRoute
   AuthenticatedManageSchoolSlugSettingsRoute: typeof AuthenticatedManageSchoolSlugSettingsRoute
   AuthenticatedManageSchoolSlugStudentsRoute: typeof AuthenticatedManageSchoolSlugStudentsRouteWithChildren
@@ -1600,8 +1642,12 @@ const AuthenticatedManageSchoolSlugRouteChildren: AuthenticatedManageSchoolSlugR
       AuthenticatedManageSchoolSlugExamsRouteWithChildren,
     AuthenticatedManageSchoolSlugGradingRoute:
       AuthenticatedManageSchoolSlugGradingRoute,
+    AuthenticatedManageSchoolSlugMeritListRoute:
+      AuthenticatedManageSchoolSlugMeritListRoute,
     AuthenticatedManageSchoolSlugNotificationsRoute:
       AuthenticatedManageSchoolSlugNotificationsRoute,
+    AuthenticatedManageSchoolSlugRankingsRoute:
+      AuthenticatedManageSchoolSlugRankingsRoute,
     AuthenticatedManageSchoolSlugResultsRoute:
       AuthenticatedManageSchoolSlugResultsRoute,
     AuthenticatedManageSchoolSlugSettingsRoute:
