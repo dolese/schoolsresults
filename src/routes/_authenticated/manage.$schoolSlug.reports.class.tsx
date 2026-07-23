@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GraduationCap } from "lucide-react";
 import { getClassPerformance } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/reports/class")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/reports/class")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

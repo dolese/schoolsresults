@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Building2 } from "lucide-react";
 import { getSchoolPerformance } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/reports/school")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/reports/school")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

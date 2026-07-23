@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BookOpen } from "lucide-react";
 import { getSubjectAnalysis } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/reports/subject")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/reports/subject")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

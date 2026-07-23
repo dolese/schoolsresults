@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Users } from "lucide-react";
 import { getGenderAnalysis } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/reports/gender")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/reports/gender")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

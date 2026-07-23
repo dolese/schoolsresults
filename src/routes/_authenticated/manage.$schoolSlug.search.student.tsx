@@ -6,7 +6,7 @@ import { Search, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { searchStudents } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/search/student")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/search/student")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

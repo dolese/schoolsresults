@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { listFormsAndSubjects, upsertStudent } from "@/lib/manage.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/students/admission")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/students/admission")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();
@@ -34,7 +34,7 @@ function Page() {
             <p className="text-sm text-muted-foreground">Register a new student. For bulk upload use the roster page.</p>
           </div>
         </div>
-        <Button asChild variant="outline" size="sm"><Link to="/_authenticated/manage/$schoolSlug/students" params={{ schoolSlug }}>Roster <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+        <Button asChild variant="outline" size="sm"><Link to="/manage/$schoolSlug/students" params={{ schoolSlug }}>Roster <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
       </div>
       <form onSubmit={(e) => { e.preventDefault(); mut.mutate(); }} className="max-w-xl space-y-4 rounded-2xl border border-border/60 bg-card p-6">
         <div className="grid gap-4 sm:grid-cols-2">

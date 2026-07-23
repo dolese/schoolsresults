@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { listClassesAndStreams, addStream, deleteStream } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/classes")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/classes")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

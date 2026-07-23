@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import { listRecentActivity } from "@/lib/dashboard.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/notifications")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/notifications")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();
