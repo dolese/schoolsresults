@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getGradingScale, resetGradingScale } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/grading")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/grading")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

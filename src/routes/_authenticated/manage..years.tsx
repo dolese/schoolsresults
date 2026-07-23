@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { listAcademicYears, addAcademicYear, setCurrentAcademicYear, deleteAcademicYear } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/years")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/years")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

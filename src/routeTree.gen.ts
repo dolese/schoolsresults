@@ -19,9 +19,20 @@ import { Route as AuthenticatedSuperRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as SchoolSlugLeaderboardRouteImport } from './routes/$schoolSlug/leaderboard'
 import { Route as SchoolSlugAnnouncementsRouteImport } from './routes/$schoolSlug/announcements'
+import { Route as AuthenticatedManageYearsRouteImport } from './routes/_authenticated/manage..years'
+import { Route as AuthenticatedManageGradingRouteImport } from './routes/_authenticated/manage..grading'
+import { Route as AuthenticatedManageClassesRouteImport } from './routes/_authenticated/manage..classes'
 import { Route as AuthenticatedManageSchoolSlugRouteImport } from './routes/_authenticated/manage.$schoolSlug'
 import { Route as SchoolSlugResultsStudentIdRouteImport } from './routes/$schoolSlug/results.$studentId'
 import { Route as AuthenticatedManageSchoolSlugIndexRouteImport } from './routes/_authenticated/manage.$schoolSlug.index'
+import { Route as AuthenticatedManageStudentsPromotionRouteImport } from './routes/_authenticated/manage..students.promotion'
+import { Route as AuthenticatedManageSearchStudentRouteImport } from './routes/_authenticated/manage..search.student'
+import { Route as AuthenticatedManageSearchResultsRouteImport } from './routes/_authenticated/manage..search.results'
+import { Route as AuthenticatedManageReportsSubjectRouteImport } from './routes/_authenticated/manage..reports.subject'
+import { Route as AuthenticatedManageReportsSchoolRouteImport } from './routes/_authenticated/manage..reports.school'
+import { Route as AuthenticatedManageReportsNectaRouteImport } from './routes/_authenticated/manage..reports.necta'
+import { Route as AuthenticatedManageReportsGenderRouteImport } from './routes/_authenticated/manage..reports.gender'
+import { Route as AuthenticatedManageReportsClassRouteImport } from './routes/_authenticated/manage..reports.class'
 import { Route as AuthenticatedManageSchoolSlugYearsRouteImport } from './routes/_authenticated/manage.$schoolSlug.years'
 import { Route as AuthenticatedManageSchoolSlugTimetableRouteImport } from './routes/_authenticated/manage.$schoolSlug.timetable'
 import { Route as AuthenticatedManageSchoolSlugTermsRouteImport } from './routes/_authenticated/manage.$schoolSlug.terms'
@@ -138,6 +149,24 @@ const SchoolSlugAnnouncementsRoute = SchoolSlugAnnouncementsRouteImport.update({
   path: '/$schoolSlug/announcements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedManageYearsRoute =
+  AuthenticatedManageYearsRouteImport.update({
+    id: '/manage/years',
+    path: '/manage/years',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageGradingRoute =
+  AuthenticatedManageGradingRouteImport.update({
+    id: '/manage/grading',
+    path: '/manage/grading',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageClassesRoute =
+  AuthenticatedManageClassesRouteImport.update({
+    id: '/manage/classes',
+    path: '/manage/classes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedManageSchoolSlugRoute =
   AuthenticatedManageSchoolSlugRouteImport.update({
     id: '/manage/$schoolSlug',
@@ -155,6 +184,54 @@ const AuthenticatedManageSchoolSlugIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedManageSchoolSlugRoute,
+  } as any)
+const AuthenticatedManageStudentsPromotionRoute =
+  AuthenticatedManageStudentsPromotionRouteImport.update({
+    id: '/manage/students/promotion',
+    path: '/manage/students/promotion',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageSearchStudentRoute =
+  AuthenticatedManageSearchStudentRouteImport.update({
+    id: '/manage/search/student',
+    path: '/manage/search/student',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageSearchResultsRoute =
+  AuthenticatedManageSearchResultsRouteImport.update({
+    id: '/manage/search/results',
+    path: '/manage/search/results',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageReportsSubjectRoute =
+  AuthenticatedManageReportsSubjectRouteImport.update({
+    id: '/manage/reports/subject',
+    path: '/manage/reports/subject',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageReportsSchoolRoute =
+  AuthenticatedManageReportsSchoolRouteImport.update({
+    id: '/manage/reports/school',
+    path: '/manage/reports/school',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageReportsNectaRoute =
+  AuthenticatedManageReportsNectaRouteImport.update({
+    id: '/manage/reports/necta',
+    path: '/manage/reports/necta',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageReportsGenderRoute =
+  AuthenticatedManageReportsGenderRouteImport.update({
+    id: '/manage/reports/gender',
+    path: '/manage/reports/gender',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManageReportsClassRoute =
+  AuthenticatedManageReportsClassRouteImport.update({
+    id: '/manage/reports/class',
+    path: '/manage/reports/class',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedManageSchoolSlugYearsRoute =
   AuthenticatedManageSchoolSlugYearsRouteImport.update({
@@ -565,6 +642,9 @@ export interface FileRoutesByFullPath {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/manage/classes': typeof AuthenticatedManageClassesRoute
+  '/manage/grading': typeof AuthenticatedManageGradingRoute
+  '/manage/years': typeof AuthenticatedManageYearsRoute
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
@@ -584,6 +664,14 @@ export interface FileRoutesByFullPath {
   '/manage/$schoolSlug/terms': typeof AuthenticatedManageSchoolSlugTermsRoute
   '/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
+  '/manage/reports/class': typeof AuthenticatedManageReportsClassRoute
+  '/manage/reports/gender': typeof AuthenticatedManageReportsGenderRoute
+  '/manage/reports/necta': typeof AuthenticatedManageReportsNectaRoute
+  '/manage/reports/school': typeof AuthenticatedManageReportsSchoolRoute
+  '/manage/reports/subject': typeof AuthenticatedManageReportsSubjectRoute
+  '/manage/search/results': typeof AuthenticatedManageSearchResultsRoute
+  '/manage/search/student': typeof AuthenticatedManageSearchStudentRoute
+  '/manage/students/promotion': typeof AuthenticatedManageStudentsPromotionRoute
   '/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
   '/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
@@ -644,6 +732,9 @@ export interface FileRoutesByTo {
   '/super': typeof AuthenticatedSuperRoute
   '/$schoolSlug': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
+  '/manage/classes': typeof AuthenticatedManageClassesRoute
+  '/manage/grading': typeof AuthenticatedManageGradingRoute
+  '/manage/years': typeof AuthenticatedManageYearsRoute
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
@@ -663,6 +754,14 @@ export interface FileRoutesByTo {
   '/manage/$schoolSlug/terms': typeof AuthenticatedManageSchoolSlugTermsRoute
   '/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
+  '/manage/reports/class': typeof AuthenticatedManageReportsClassRoute
+  '/manage/reports/gender': typeof AuthenticatedManageReportsGenderRoute
+  '/manage/reports/necta': typeof AuthenticatedManageReportsNectaRoute
+  '/manage/reports/school': typeof AuthenticatedManageReportsSchoolRoute
+  '/manage/reports/subject': typeof AuthenticatedManageReportsSubjectRoute
+  '/manage/search/results': typeof AuthenticatedManageSearchResultsRoute
+  '/manage/search/student': typeof AuthenticatedManageSearchStudentRoute
+  '/manage/students/promotion': typeof AuthenticatedManageStudentsPromotionRoute
   '/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
   '/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
@@ -726,6 +825,9 @@ export interface FileRoutesById {
   '/$schoolSlug/': typeof SchoolSlugIndexRoute
   '/$schoolSlug/results/$studentId': typeof SchoolSlugResultsStudentIdRoute
   '/_authenticated/manage/$schoolSlug': typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  '/_authenticated/manage/classes': typeof AuthenticatedManageClassesRoute
+  '/_authenticated/manage/grading': typeof AuthenticatedManageGradingRoute
+  '/_authenticated/manage/years': typeof AuthenticatedManageYearsRoute
   '/$schoolSlug/students/$studentId/history': typeof SchoolSlugStudentsStudentIdHistoryRoute
   '/_authenticated/manage/$schoolSlug/academics': typeof AuthenticatedManageSchoolSlugAcademicsRoute
   '/_authenticated/manage/$schoolSlug/activity': typeof AuthenticatedManageSchoolSlugActivityRoute
@@ -745,6 +847,14 @@ export interface FileRoutesById {
   '/_authenticated/manage/$schoolSlug/terms': typeof AuthenticatedManageSchoolSlugTermsRoute
   '/_authenticated/manage/$schoolSlug/timetable': typeof AuthenticatedManageSchoolSlugTimetableRoute
   '/_authenticated/manage/$schoolSlug/years': typeof AuthenticatedManageSchoolSlugYearsRoute
+  '/_authenticated/manage/reports/class': typeof AuthenticatedManageReportsClassRoute
+  '/_authenticated/manage/reports/gender': typeof AuthenticatedManageReportsGenderRoute
+  '/_authenticated/manage/reports/necta': typeof AuthenticatedManageReportsNectaRoute
+  '/_authenticated/manage/reports/school': typeof AuthenticatedManageReportsSchoolRoute
+  '/_authenticated/manage/reports/subject': typeof AuthenticatedManageReportsSubjectRoute
+  '/_authenticated/manage/search/results': typeof AuthenticatedManageSearchResultsRoute
+  '/_authenticated/manage/search/student': typeof AuthenticatedManageSearchStudentRoute
+  '/_authenticated/manage/students/promotion': typeof AuthenticatedManageStudentsPromotionRoute
   '/_authenticated/manage/$schoolSlug/': typeof AuthenticatedManageSchoolSlugIndexRoute
   '/_authenticated/manage/$schoolSlug/account/help': typeof AuthenticatedManageSchoolSlugAccountHelpRoute
   '/_authenticated/manage/$schoolSlug/account/password': typeof AuthenticatedManageSchoolSlugAccountPasswordRoute
@@ -808,6 +918,9 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/manage/$schoolSlug'
+    | '/manage/classes'
+    | '/manage/grading'
+    | '/manage/years'
     | '/$schoolSlug/students/$studentId/history'
     | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/activity'
@@ -827,6 +940,14 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/terms'
     | '/manage/$schoolSlug/timetable'
     | '/manage/$schoolSlug/years'
+    | '/manage/reports/class'
+    | '/manage/reports/gender'
+    | '/manage/reports/necta'
+    | '/manage/reports/school'
+    | '/manage/reports/subject'
+    | '/manage/search/results'
+    | '/manage/search/student'
+    | '/manage/students/promotion'
     | '/manage/$schoolSlug/'
     | '/manage/$schoolSlug/account/help'
     | '/manage/$schoolSlug/account/password'
@@ -887,6 +1008,9 @@ export interface FileRouteTypes {
     | '/super'
     | '/$schoolSlug'
     | '/$schoolSlug/results/$studentId'
+    | '/manage/classes'
+    | '/manage/grading'
+    | '/manage/years'
     | '/$schoolSlug/students/$studentId/history'
     | '/manage/$schoolSlug/academics'
     | '/manage/$schoolSlug/activity'
@@ -906,6 +1030,14 @@ export interface FileRouteTypes {
     | '/manage/$schoolSlug/terms'
     | '/manage/$schoolSlug/timetable'
     | '/manage/$schoolSlug/years'
+    | '/manage/reports/class'
+    | '/manage/reports/gender'
+    | '/manage/reports/necta'
+    | '/manage/reports/school'
+    | '/manage/reports/subject'
+    | '/manage/search/results'
+    | '/manage/search/student'
+    | '/manage/students/promotion'
     | '/manage/$schoolSlug'
     | '/manage/$schoolSlug/account/help'
     | '/manage/$schoolSlug/account/password'
@@ -968,6 +1100,9 @@ export interface FileRouteTypes {
     | '/$schoolSlug/'
     | '/$schoolSlug/results/$studentId'
     | '/_authenticated/manage/$schoolSlug'
+    | '/_authenticated/manage/classes'
+    | '/_authenticated/manage/grading'
+    | '/_authenticated/manage/years'
     | '/$schoolSlug/students/$studentId/history'
     | '/_authenticated/manage/$schoolSlug/academics'
     | '/_authenticated/manage/$schoolSlug/activity'
@@ -987,6 +1122,14 @@ export interface FileRouteTypes {
     | '/_authenticated/manage/$schoolSlug/terms'
     | '/_authenticated/manage/$schoolSlug/timetable'
     | '/_authenticated/manage/$schoolSlug/years'
+    | '/_authenticated/manage/reports/class'
+    | '/_authenticated/manage/reports/gender'
+    | '/_authenticated/manage/reports/necta'
+    | '/_authenticated/manage/reports/school'
+    | '/_authenticated/manage/reports/subject'
+    | '/_authenticated/manage/search/results'
+    | '/_authenticated/manage/search/student'
+    | '/_authenticated/manage/students/promotion'
     | '/_authenticated/manage/$schoolSlug/'
     | '/_authenticated/manage/$schoolSlug/account/help'
     | '/_authenticated/manage/$schoolSlug/account/password'
@@ -1122,6 +1265,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolSlugAnnouncementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/manage/years': {
+      id: '/_authenticated/manage/years'
+      path: '/manage/years'
+      fullPath: '/manage/years'
+      preLoaderRoute: typeof AuthenticatedManageYearsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/grading': {
+      id: '/_authenticated/manage/grading'
+      path: '/manage/grading'
+      fullPath: '/manage/grading'
+      preLoaderRoute: typeof AuthenticatedManageGradingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/classes': {
+      id: '/_authenticated/manage/classes'
+      path: '/manage/classes'
+      fullPath: '/manage/classes'
+      preLoaderRoute: typeof AuthenticatedManageClassesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/manage/$schoolSlug': {
       id: '/_authenticated/manage/$schoolSlug'
       path: '/manage/$schoolSlug'
@@ -1142,6 +1306,62 @@ declare module '@tanstack/react-router' {
       fullPath: '/manage/$schoolSlug/'
       preLoaderRoute: typeof AuthenticatedManageSchoolSlugIndexRouteImport
       parentRoute: typeof AuthenticatedManageSchoolSlugRoute
+    }
+    '/_authenticated/manage/students/promotion': {
+      id: '/_authenticated/manage/students/promotion'
+      path: '/manage/students/promotion'
+      fullPath: '/manage/students/promotion'
+      preLoaderRoute: typeof AuthenticatedManageStudentsPromotionRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/search/student': {
+      id: '/_authenticated/manage/search/student'
+      path: '/manage/search/student'
+      fullPath: '/manage/search/student'
+      preLoaderRoute: typeof AuthenticatedManageSearchStudentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/search/results': {
+      id: '/_authenticated/manage/search/results'
+      path: '/manage/search/results'
+      fullPath: '/manage/search/results'
+      preLoaderRoute: typeof AuthenticatedManageSearchResultsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/reports/subject': {
+      id: '/_authenticated/manage/reports/subject'
+      path: '/manage/reports/subject'
+      fullPath: '/manage/reports/subject'
+      preLoaderRoute: typeof AuthenticatedManageReportsSubjectRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/reports/school': {
+      id: '/_authenticated/manage/reports/school'
+      path: '/manage/reports/school'
+      fullPath: '/manage/reports/school'
+      preLoaderRoute: typeof AuthenticatedManageReportsSchoolRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/reports/necta': {
+      id: '/_authenticated/manage/reports/necta'
+      path: '/manage/reports/necta'
+      fullPath: '/manage/reports/necta'
+      preLoaderRoute: typeof AuthenticatedManageReportsNectaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/reports/gender': {
+      id: '/_authenticated/manage/reports/gender'
+      path: '/manage/reports/gender'
+      fullPath: '/manage/reports/gender'
+      preLoaderRoute: typeof AuthenticatedManageReportsGenderRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manage/reports/class': {
+      id: '/_authenticated/manage/reports/class'
+      path: '/manage/reports/class'
+      fullPath: '/manage/reports/class'
+      preLoaderRoute: typeof AuthenticatedManageReportsClassRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/manage/$schoolSlug/years': {
       id: '/_authenticated/manage/$schoolSlug/years'
@@ -1858,6 +2078,17 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRoute
   AuthenticatedSuperRoute: typeof AuthenticatedSuperRoute
   AuthenticatedManageSchoolSlugRoute: typeof AuthenticatedManageSchoolSlugRouteWithChildren
+  AuthenticatedManageClassesRoute: typeof AuthenticatedManageClassesRoute
+  AuthenticatedManageGradingRoute: typeof AuthenticatedManageGradingRoute
+  AuthenticatedManageYearsRoute: typeof AuthenticatedManageYearsRoute
+  AuthenticatedManageReportsClassRoute: typeof AuthenticatedManageReportsClassRoute
+  AuthenticatedManageReportsGenderRoute: typeof AuthenticatedManageReportsGenderRoute
+  AuthenticatedManageReportsNectaRoute: typeof AuthenticatedManageReportsNectaRoute
+  AuthenticatedManageReportsSchoolRoute: typeof AuthenticatedManageReportsSchoolRoute
+  AuthenticatedManageReportsSubjectRoute: typeof AuthenticatedManageReportsSubjectRoute
+  AuthenticatedManageSearchResultsRoute: typeof AuthenticatedManageSearchResultsRoute
+  AuthenticatedManageSearchStudentRoute: typeof AuthenticatedManageSearchStudentRoute
+  AuthenticatedManageStudentsPromotionRoute: typeof AuthenticatedManageStudentsPromotionRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -1865,6 +2096,19 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSuperRoute: AuthenticatedSuperRoute,
   AuthenticatedManageSchoolSlugRoute:
     AuthenticatedManageSchoolSlugRouteWithChildren,
+  AuthenticatedManageClassesRoute: AuthenticatedManageClassesRoute,
+  AuthenticatedManageGradingRoute: AuthenticatedManageGradingRoute,
+  AuthenticatedManageYearsRoute: AuthenticatedManageYearsRoute,
+  AuthenticatedManageReportsClassRoute: AuthenticatedManageReportsClassRoute,
+  AuthenticatedManageReportsGenderRoute: AuthenticatedManageReportsGenderRoute,
+  AuthenticatedManageReportsNectaRoute: AuthenticatedManageReportsNectaRoute,
+  AuthenticatedManageReportsSchoolRoute: AuthenticatedManageReportsSchoolRoute,
+  AuthenticatedManageReportsSubjectRoute:
+    AuthenticatedManageReportsSubjectRoute,
+  AuthenticatedManageSearchResultsRoute: AuthenticatedManageSearchResultsRoute,
+  AuthenticatedManageSearchStudentRoute: AuthenticatedManageSearchStudentRoute,
+  AuthenticatedManageStudentsPromotionRoute:
+    AuthenticatedManageStudentsPromotionRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

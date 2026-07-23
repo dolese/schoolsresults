@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Award } from "lucide-react";
 import { getNectaAnalysis } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/reports/necta")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/reports/necta")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

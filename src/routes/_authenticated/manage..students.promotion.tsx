@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { listClassesAndStreams, promoteStudents } from "@/lib/academic.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/students/promotion")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/students/promotion")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();
