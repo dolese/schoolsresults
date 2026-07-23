@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { listFormsAndSubjects, upsertStudent } from "@/lib/manage.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/students/admission")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/students/admission")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

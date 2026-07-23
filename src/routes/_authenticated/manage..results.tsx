@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Award, ArrowRight } from "lucide-react";
 import { listExams } from "@/lib/manage.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/results")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/results")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

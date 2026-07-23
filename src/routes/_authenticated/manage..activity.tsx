@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Activity, ClipboardList, Megaphone, UserPlus, Send } from "lucide-react";
 import { listRecentActivity } from "@/lib/dashboard.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/activity")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/activity")({ component: Page });
 
 const ICONS: Record<string, typeof Activity> = { exam: ClipboardList, "exam-published": Send, announcement: Megaphone, student: UserPlus };
 

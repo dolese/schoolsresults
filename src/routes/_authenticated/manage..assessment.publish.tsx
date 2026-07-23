@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { listExams, setExamPublished } from "@/lib/manage.functions";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/assessment/publish")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/assessment/publish")({ component: Page });
 
 function Page() {
   const { schoolSlug } = Route.useParams();

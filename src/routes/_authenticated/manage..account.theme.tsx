@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Sun, Moon, Monitor, Palette } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/account/theme")({ component: Page });
+export const Route = createFileRoute("/_authenticated/manage/account/theme")({ component: Page });
 
 type Mode = "light" | "dark" | "system";
 
