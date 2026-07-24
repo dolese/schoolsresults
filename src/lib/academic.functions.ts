@@ -160,7 +160,9 @@ export const getClassPerformance = createServerFn({ method: "GET" })
   .inputValidator((i) => z.object({ slug: slugSchema }).parse(i))
   .handler(async ({ data, context }) => {
     const d = await loadReportData(context.supabase, data.slug);
-    const studentForm = new Map(d.students.map((s: { id: string; form_id: string | null }) => [s.id, s.form_id]));
+    const studentForm = new Map<string, string | null>(
+      d.students.map((s: { id: string; form_id: string | null }) => [s.id, s.form_id] as [string, string | null]),
+    );
     const perForm = new Map<string, { total: number; count: number; students: Set<string> }>();
     for (const m of d.marks) {
       if (m.score == null) continue;
@@ -172,7 +174,7 @@ export const getClassPerformance = createServerFn({ method: "GET" })
       cur.students.add(m.student_id);
       perForm.set(fid, cur);
     }
-    const rows = d.forms.map((f: { id: string; name: string; level: number }) => {
+    const rows: Array<{ id: string; name: string; level: number; avg: number; students: number; entries: number }> = d.forms.map((f: { id: string; name: string; level: number }) => {
       const a = perForm.get(f.id);
       return { id: f.id, name: f.name, level: f.level, avg: a && a.count ? a.total / a.count : 0, students: a?.students.size ?? 0, entries: a?.count ?? 0 };
     });
@@ -193,7 +195,7 @@ export const getSubjectAnalysis = createServerFn({ method: "GET" })
       if (Number(m.score) >= 30) cur.pass += 1;
       perSubject.set(m.subject_id, cur);
     }
-    const rows = d.subjects.map((s: { id: string; name: string; code: string | null }) => {
+    const rows: Array<{ id: string; name: string; code: string | null; avg: number; entries: number; passRate: number; grade: string }> = d.subjects.map((s: { id: string; name: string; code: string | null }) => {
       const a = perSubject.get(s.id);
       const avg = a && a.count ? a.total / a.count : 0;
       return { id: s.id, name: s.name, code: s.code, avg, entries: a?.count ?? 0, passRate: a && a.count ? (a.pass / a.count) * 100 : 0, grade: a && a.count ? gradeFor(avg).grade : "-" };
