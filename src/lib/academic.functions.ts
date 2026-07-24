@@ -160,7 +160,9 @@ export const getClassPerformance = createServerFn({ method: "GET" })
   .inputValidator((i) => z.object({ slug: slugSchema }).parse(i))
   .handler(async ({ data, context }) => {
     const d = await loadReportData(context.supabase, data.slug);
-    const studentForm = new Map(d.students.map((s: { id: string; form_id: string | null }) => [s.id, s.form_id]));
+    const studentForm = new Map<string, string | null>(
+      d.students.map((s: { id: string; form_id: string | null }) => [s.id, s.form_id] as [string, string | null]),
+    );
     const perForm = new Map<string, { total: number; count: number; students: Set<string> }>();
     for (const m of d.marks) {
       if (m.score == null) continue;
