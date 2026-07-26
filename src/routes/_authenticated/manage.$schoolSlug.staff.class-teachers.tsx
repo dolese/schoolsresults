@@ -26,7 +26,7 @@ function Page() {
             <div key={f.id} className="flex items-center justify-between rounded-2xl border border-border/60 bg-card p-5">
               <div>
                 <div className="font-semibold">{f.name}</div>
-                <div className="text-xs text-muted-foreground">{f.studentCount} students · {f.streams.length} streams</div>
+                <div className="text-xs text-muted-foreground">{f.count} students · {(data?.streams ?? []).filter((s) => s.form_id === f.id).length} streams</div>
               </div>
               <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">Unassigned</span>
             </div>
