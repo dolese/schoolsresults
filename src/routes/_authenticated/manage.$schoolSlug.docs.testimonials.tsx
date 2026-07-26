@@ -31,7 +31,7 @@ function Page() {
         <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
           <table className="w-full text-sm">
             <tbody>
-              {(data?.students ?? []).map((s) => (
+              {(data?.rows ?? []).map((s) => (
                 <tr key={s.id} className="border-t border-border/50">
                   <td className="p-3 font-mono text-xs">{s.admission_no}</td>
                   <td className="font-medium">{s.full_name}</td>
@@ -41,7 +41,7 @@ function Page() {
                   </td>
                 </tr>
               ))}
-              {(data?.students ?? []).length === 0 && <tr><td className="p-6 text-center text-muted-foreground">No matches.</td></tr>}
+              {(data?.rows ?? []).length === 0 && <tr><td className="p-6 text-center text-muted-foreground">No matches.</td></tr>}
             </tbody>
           </table>
         </div>
