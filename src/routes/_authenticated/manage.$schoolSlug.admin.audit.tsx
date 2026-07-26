@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { History } from "lucide-react";
-import { listMarkHistory, listRecentActivity } from "@/lib/dashboard.functions";
+import { listRecentActivity } from "@/lib/dashboard.functions";
+import { listMarkHistory } from "@/lib/sims.functions";
 
 export const Route = createFileRoute("/_authenticated/manage/$schoolSlug/admin/audit")({ component: Page });
 
@@ -26,7 +27,7 @@ function Page() {
         <section className="rounded-2xl border border-border/60 bg-card">
           <header className="border-b border-border/50 p-4 text-sm font-semibold">Marks changes</header>
           <div className="max-h-[520px] overflow-y-auto">
-            {(marksQ.data?.entries ?? []).map((e) => (
+            {(marksQ.data?.entries ?? []).map((e: { id: string; student: string; subject: string; exam: string; updated_at: string; score: number | null }) => (
               <div key={e.id} className="flex items-center justify-between gap-3 border-b border-border/40 p-3 text-sm">
                 <div className="min-w-0">
                   <div className="truncate font-medium">{e.student} · <span className="text-muted-foreground">{e.subject}</span></div>
@@ -41,7 +42,7 @@ function Page() {
         <section className="rounded-2xl border border-border/60 bg-card">
           <header className="border-b border-border/50 p-4 text-sm font-semibold">System activity</header>
           <div className="max-h-[520px] overflow-y-auto">
-            {(actQ.data?.items ?? []).map((i) => (
+            {(actQ.data?.items ?? []).map((i: { kind: string; title: string; at: string; id: string }) => (
               <div key={`${i.kind}-${i.id}`} className="flex items-center justify-between gap-3 border-b border-border/40 p-3 text-sm">
                 <div className="min-w-0">
                   <div className="truncate font-medium">{i.title}</div>
